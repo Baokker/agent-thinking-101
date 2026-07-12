@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent Thinking 101 | 课程文档原型</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiMxNzIxMmIiLz4KICA8dGV4dCB4PSIzMiIgeT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2ZmZmZmZiI+QVQ8L3RleHQ+Cjwvc3ZnPgo=" type="image/svg+xml" />
+    <style>
+:root {
+  color-scheme: light;
+  --ink: #17212b;
+  --muted: #64717d;
+  --paper: #fbfaf7;
+  --panel: #ffffff;
+  --line: #dfe5e8;
+  --teal: #1f7a8c;
+  --amber: #b56b11;
+  --violet: #6f5792;
+  --green-soft: #e8f4f2;
+  --amber-soft: #fff1df;
+  --violet-soft: #f1edf7;
+  --shadow: 0 22px 60px rgba(19, 33, 43, 0.12);
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(232, 244, 242, 0.8), rgba(251, 250, 247, 0.86) 38%, rgba(241, 237, 247, 0.84)),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.side-panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 28px 22px;
+  border-right: 1px solid rgba(23, 33, 43, 0.12);
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(18px);
+  overflow-y: auto;
+}
+
+.brand-block {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.brand-mark {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 22px;
+  line-height: 1.12;
+}
+
+.doc-list {
+  display: grid;
+  gap: 8px;
+}
+
+.doc-button {
+  width: 100%;
+  min-height: 58px;
+  padding: 11px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.doc-button:hover {
+  background: rgba(31, 122, 140, 0.08);
+  transform: translateX(2px);
+}
+
+.doc-button.active {
+  background: var(--green-soft);
+  border-color: rgba(31, 122, 140, 0.22);
+}
+
+.doc-button strong {
+  display: block;
+  font-size: 14px;
+}
+
+.doc-button span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.side-note {
+  margin-top: 26px;
+  padding: 14px;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 241, 223, 0.68);
+  color: #5f4933;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.main-panel {
+  min-width: 0;
+  padding: 34px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.88fr) minmax(360px, 1.12fr);
+  gap: 28px;
+  align-items: center;
+  min-height: 330px;
+  padding: 32px;
+  border: 1px solid rgba(23, 33, 43, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.hero h2 {
+  max-width: 780px;
+  font-size: clamp(30px, 4vw, 58px);
+  line-height: 1.05;
+}
+
+.hero-text {
+  max-width: 620px;
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero img {
+  width: 100%;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.overview-grid article {
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.overview-grid span {
+  display: block;
+  color: var(--amber);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.overview-grid p {
+  margin: 12px 0 0;
+  color: var(--muted);
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tab {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid rgba(23, 33, 43, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.content-layout,
+.chapter-board,
+.asset-board {
+  display: none;
+}
+
+.content-layout.active {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  align-items: start;
+}
+
+.chapter-board.active,
+.asset-board.active {
+  display: block;
+}
+
+.reader-card,
+.toc-card,
+.chapter-board,
+.asset-board {
+  border: 1px solid rgba(23, 33, 43, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 14px 40px rgba(19, 33, 43, 0.08);
+}
+
+.reader-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 18px;
+  align-items: center;
+  padding: 22px 26px;
+  border-bottom: 1px solid rgba(23, 33, 43, 0.1);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.reader-toolbar h3 {
+  font-size: 26px;
+}
+
+.search-box {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.search-box input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(23, 33, 43, 0.18);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.doc-content {
+  padding: 26px;
+  line-height: 1.78;
+}
+
+.doc-content h1,
+.doc-content h2,
+.doc-content h3 {
+  scroll-margin-top: 98px;
+}
+
+.doc-content h1 {
+  margin: 0 0 20px;
+  font-size: 42px;
+  line-height: 1.12;
+}
+
+.doc-content h2 {
+  margin: 34px 0 14px;
+  padding-top: 6px;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.doc-content h3 {
+  margin: 26px 0 10px;
+  color: #263441;
+  font-size: 21px;
+}
+
+.doc-content p,
+.doc-content li {
+  color: #34424e;
+  font-size: 16px;
+}
+
+.doc-content blockquote {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--teal);
+  background: var(--green-soft);
+  color: #21424a;
+}
+
+.doc-content pre {
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid rgba(23, 33, 43, 0.12);
+  border-radius: 8px;
+  background: #13202a;
+  color: #f7f4ed;
+  line-height: 1.65;
+}
+
+.doc-content code {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.doc-content :not(pre) > code {
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: #eef3f5;
+  color: #204653;
+}
+
+.doc-content a {
+  color: var(--teal);
+  text-decoration-thickness: 2px;
+}
+
+.doc-content img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.doc-content mark {
+  border-radius: 4px;
+  background: #ffe7a8;
+}
+
+.toc-card {
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.toc-link {
+  display: block;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(23, 33, 43, 0.08);
+  color: #465460;
+  font-size: 13px;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.toc-link.level-3 {
+  padding-left: 14px;
+  color: #687581;
+}
+
+.toc-link:hover {
+  color: var(--teal);
+}
+
+.section-head {
+  padding: 26px 26px 0;
+}
+
+.section-head h3 {
+  font-size: 34px;
+}
+
+.section-head p:not(.eyebrow) {
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 26px;
+}
+
+.chapter-card {
+  min-height: 190px;
+  padding: 20px;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fff, rgba(232, 244, 242, 0.56));
+}
+
+.chapter-card span {
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.chapter-card h4 {
+  margin: 10px 0;
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.chapter-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.asset-grid {
+  display: grid;
+  gap: 18px;
+  padding: 26px;
+}
+
+.asset-grid figure {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(23, 33, 43, 0.1);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.asset-grid img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+
+.asset-grid figcaption {
+  margin-top: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel {
+    position: relative;
+    height: auto;
+  }
+
+  .doc-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero,
+  .content-layout.active,
+  .reader-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .toc-card {
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .main-panel,
+  .side-panel {
+    padding: 16px;
+  }
+
+  .hero {
+    padding: 20px;
+  }
+
+  .overview-grid,
+  .chapter-grid,
+  .doc-list {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+}
+
+</style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="side-panel" aria-label="课程文档导航">
+        <div class="brand-block">
+          <div class="brand-mark">AT</div>
+          <div>
+            <p class="eyebrow">Teaching Agent</p>
+            <h1>Agent Thinking 101</h1>
+          </div>
+        </div>
+
+        <nav class="doc-list" id="docList" aria-label="文档列表"></nav>
+
+        <div class="side-note">
+          <p>本原型直接读取 <code>docs/*.md</code>，后续改 Markdown 后刷新页面即可查看。</p>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Agent Thinking 101</p>
+            <h2>课程写到哪里、各章怎么安排，都在这里。</h2>
+            <p class="hero-text">
+              可以读主教程，也可以切到讲师手册、练习册和传播文案。Markdown 改完后刷新页面就会更新。
+            </p>
+          </div>
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgVGhpbmtpbmcgMTAxIGNvdXJzZSBoZXJvPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBjbGVhbiBjb3Vyc2UgaGVybyBzaG93aW5nIGEgcGVyc29uIHR1cm5pbmcgaWRlYXMgaW50byB0YXNrcywgdG9vbHMsIGZlZWRiYWNrLCBhbmQgZmluaXNoZWQgd29ya3Mgd2l0aCBhbiBBSSBhZ2VudC48L2Rlc2M+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y3ZjRlZCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNlZWY2ZjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmMGZiIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIxOCIgc3RkRGV2aWF0aW9uPSIyNCIgZmxvb2QtY29sb3I9IiMxNjIwMmEiIGZsb29kLW9wYWNpdHk9IjAuMTYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDg4KSI+CiAgICA8dGV4dCB4PSIwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3NCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzE3MjEyYiI+5ZKMIEFJIEFnZW50IOS4gOi1t+WBmuS6izwvdGV4dD4KICAgIDx0ZXh0IHg9IjAiIHk9IjEyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzUzNjA2YyI+5LuO4oCc6ZeuIEFJ4oCd5Yiw4oCc5oyH5oylIEFJIOWujOaIkOS7u+WKoeKAnTwvdGV4dD4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAgMjMwKSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDMwIiBoZWlnaHQ9IjQ3MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPuaZrumAmiBBSSDkvb/nlKg8L3RleHQ+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCA5OCkiPgogICAgICA8cmVjdCB3aWR0aD0iMzU0IiBoZWlnaHQ9IjY0IiByeD0iMTgiIGZpbGw9IiNmMGYzZjYiLz4KICAgICAgPHRleHQgeD0iMjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTI2MDZiIj7luK7miJHmlLnkuIDmrrXmloflrZc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCAxODQpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSIjZjBmM2Y2Ii8+CiAgICAgIDx0ZXh0IHg9IjI0IiB5PSI0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzUyNjA2YiI+5biu5oiR5YaZ5Liq5qCH6aKYPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzggMjcwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSIzMzAiIGhlaWdodD0iNjQiIHJ4PSIxOCIgZmlsbD0iI2YwZjNmNiIvPgogICAgICA8dGV4dCB4PSIyNCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MjYwNmIiPuaAu+e7k+i/meevh+aWh+eroDwvdGV4dD4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjM4IiB5PSI0MTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIGZpbGw9IiM2YTc2ODIiPumXruS4gOWPpe+8jOetlOS4gOWPpTwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwIDQ1NSkiPgogICAgPHBhdGggZD0iTTAgMCBDOTAgLTUyIDE3MCAtNTIgMjYwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmN2E4YyIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNMjUyIC00OCBMMzEwIDAgTDI1MiA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWY3YThjIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5MzAgMTk1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDcwIiBoZWlnaHQ9IjU0MCIgcng9IjMwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPkFnZW50IOaAnee7tDwvdGV4dD4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUyIDEwMCkiPgogICAgICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U4ZjRmMiIvPgogICAgICA8dGV4dCB4PSI1MCIgeT0iNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxZjdhOGMiPuebruaghzwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0NSAxMDApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNmZmYxZGYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjYTY1ZjAwIj7lt6Xlhbc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MiAyNTApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNlZWYwZmYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjNTQ1MmEzIj7lj43ppog8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMjUwKSI+CiAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjZjRlYmY4Ii8+CiAgICAgIDx0ZXh0IHg9IjUwIiB5PSI1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzdhNGI4ZiI+5L2c5ZOBPC90ZXh0PgogICAgPC9nPgogICAgPHRleHQgeD0iMzgiIHk9IjQ0OCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K+05riF5qWa55uu5qCH77yM5ouG5oiQ5q2l6aqk77yMPC90ZXh0PgogICAgPHRleHQgeD0iMzgiIHk9IjQ4NCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K6pIEFJIOeUqOW3peWFt+aJp+ihjO+8jOWGjeeUseS6uuajgOafpeOAgjwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDc5MCkiPgogICAgPHJlY3Qgd2lkdGg9IjE0MDAiIGhlaWdodD0iMiIgZmlsbD0iI2Q4ZGRlMiIvPgogICAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1MzYwNmMiPkFnZW50IFRoaW5raW5nIDEwMSDCtyDpnaLlkJHpnZLlsJHlubTjgIHmiJDlubTkurrjgIHlrrbplb/ogIHluIjlkozmlYjnjoflt6XlhbfnlKjmiLc8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K" alt="Agent Thinking 101 课程主视觉" />
+        </header>
+
+        <section class="overview-grid" aria-label="课程总览">
+          <article>
+            <span>10</span>
+            <p>主课程章节</p>
+          </article>
+          <article>
+            <span>24</span>
+            <p>Prompt / Skill 模板</p>
+          </article>
+          <article>
+            <span>4</span>
+            <p>体验课版本</p>
+          </article>
+          <article>
+            <span>3</span>
+            <p>视觉信息图</p>
+          </article>
+        </section>
+
+        <section class="tabs" aria-label="内容视图切换">
+          <button class="tab active" data-view="reader">文档阅读</button>
+          <button class="tab" data-view="chapters">课程章节</button>
+          <button class="tab" data-view="assets">视觉资产</button>
+        </section>
+
+        <section class="content-layout active" id="readerView">
+          <article class="reader-card">
+            <div class="reader-toolbar">
+              <div>
+                <p class="eyebrow" id="currentKind">课程文档</p>
+                <h3 id="currentTitle">加载中...</h3>
+              </div>
+              <label class="search-box">
+                <span>搜索</span>
+                <input id="searchInput" type="search" placeholder="输入关键词过滤当前文档" />
+              </label>
+            </div>
+            <div class="doc-content" id="docContent" aria-live="polite"></div>
+          </article>
+
+          <aside class="toc-card" aria-label="当前文档章节">
+            <p class="eyebrow">章节目录</p>
+            <div id="toc"></div>
+          </aside>
+        </section>
+
+        <section class="chapter-board" id="chaptersView">
+          <div class="section-head">
+            <p class="eyebrow">Course Map</p>
+            <h3>十章课程主线</h3>
+            <p>这部分从主教程正文中自动抽取一级课程章节，适合快速看课程骨架。</p>
+          </div>
+          <div class="chapter-grid" id="chapterGrid"></div>
+        </section>
+
+        <section class="asset-board" id="assetsView">
+          <div class="section-head">
+            <p class="eyebrow">Visual System</p>
+            <h3>课程视觉资产</h3>
+            <p>这些图可以用于课程介绍页、试讲投影、Notion 文档或小红书封面草稿。</p>
+          </div>
+          <div class="asset-grid">
+            <figure>
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgVGhpbmtpbmcgMTAxIGNvdXJzZSBoZXJvPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBjbGVhbiBjb3Vyc2UgaGVybyBzaG93aW5nIGEgcGVyc29uIHR1cm5pbmcgaWRlYXMgaW50byB0YXNrcywgdG9vbHMsIGZlZWRiYWNrLCBhbmQgZmluaXNoZWQgd29ya3Mgd2l0aCBhbiBBSSBhZ2VudC48L2Rlc2M+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y3ZjRlZCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNlZWY2ZjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmMGZiIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIxOCIgc3RkRGV2aWF0aW9uPSIyNCIgZmxvb2QtY29sb3I9IiMxNjIwMmEiIGZsb29kLW9wYWNpdHk9IjAuMTYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDg4KSI+CiAgICA8dGV4dCB4PSIwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3NCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzE3MjEyYiI+5ZKMIEFJIEFnZW50IOS4gOi1t+WBmuS6izwvdGV4dD4KICAgIDx0ZXh0IHg9IjAiIHk9IjEyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzUzNjA2YyI+5LuO4oCc6ZeuIEFJ4oCd5Yiw4oCc5oyH5oylIEFJIOWujOaIkOS7u+WKoeKAnTwvdGV4dD4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAgMjMwKSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDMwIiBoZWlnaHQ9IjQ3MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPuaZrumAmiBBSSDkvb/nlKg8L3RleHQ+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCA5OCkiPgogICAgICA8cmVjdCB3aWR0aD0iMzU0IiBoZWlnaHQ9IjY0IiByeD0iMTgiIGZpbGw9IiNmMGYzZjYiLz4KICAgICAgPHRleHQgeD0iMjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTI2MDZiIj7luK7miJHmlLnkuIDmrrXmloflrZc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCAxODQpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSIjZjBmM2Y2Ii8+CiAgICAgIDx0ZXh0IHg9IjI0IiB5PSI0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzUyNjA2YiI+5biu5oiR5YaZ5Liq5qCH6aKYPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzggMjcwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSIzMzAiIGhlaWdodD0iNjQiIHJ4PSIxOCIgZmlsbD0iI2YwZjNmNiIvPgogICAgICA8dGV4dCB4PSIyNCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MjYwNmIiPuaAu+e7k+i/meevh+aWh+eroDwvdGV4dD4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjM4IiB5PSI0MTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIGZpbGw9IiM2YTc2ODIiPumXruS4gOWPpe+8jOetlOS4gOWPpTwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwIDQ1NSkiPgogICAgPHBhdGggZD0iTTAgMCBDOTAgLTUyIDE3MCAtNTIgMjYwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmN2E4YyIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNMjUyIC00OCBMMzEwIDAgTDI1MiA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWY3YThjIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5MzAgMTk1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDcwIiBoZWlnaHQ9IjU0MCIgcng9IjMwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPkFnZW50IOaAnee7tDwvdGV4dD4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUyIDEwMCkiPgogICAgICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U4ZjRmMiIvPgogICAgICA8dGV4dCB4PSI1MCIgeT0iNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxZjdhOGMiPuebruaghzwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0NSAxMDApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNmZmYxZGYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjYTY1ZjAwIj7lt6Xlhbc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MiAyNTApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNlZWYwZmYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjNTQ1MmEzIj7lj43ppog8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMjUwKSI+CiAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjZjRlYmY4Ii8+CiAgICAgIDx0ZXh0IHg9IjUwIiB5PSI1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzdhNGI4ZiI+5L2c5ZOBPC90ZXh0PgogICAgPC9nPgogICAgPHRleHQgeD0iMzgiIHk9IjQ0OCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K+05riF5qWa55uu5qCH77yM5ouG5oiQ5q2l6aqk77yMPC90ZXh0PgogICAgPHRleHQgeD0iMzgiIHk9IjQ4NCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K6pIEFJIOeUqOW3peWFt+aJp+ihjO+8jOWGjeeUseS6uuajgOafpeOAgjwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDc5MCkiPgogICAgPHJlY3Qgd2lkdGg9IjE0MDAiIGhlaWdodD0iMiIgZmlsbD0iI2Q4ZGRlMiIvPgogICAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1MzYwNmMiPkFnZW50IFRoaW5raW5nIDEwMSDCtyDpnaLlkJHpnZLlsJHlubTjgIHmiJDlubTkurrjgIHlrrbplb/ogIHluIjlkozmlYjnjoflt6XlhbfnlKjmiLc8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K" alt="课程主视觉" />
+              <figcaption>课程主视觉：从聊天到做事</figcaption>
+            </figure>
+            <figure>
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgY29sbGFib3JhdGlvbiBsb29wPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBsb29wIGRpYWdyYW0gZm9yIEFnZW50IHRoaW5raW5nOiBnb2FsLCBjb250ZXh0LCBwbGFuLCB0b29scywgZmVlZGJhY2ssIGNoZWNrLCBhbmQgbWVtb3J5LjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmYmZhZjciLz4KICA8dGV4dCB4PSI3MDAiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj5BZ2VudCDljY/kvZzlvqrnjq88L3RleHQ+CiAgPHRleHQgeD0iNzAwIiB5PSIxMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NTcxN2QiPuebruaghyDihpIg5LiK5LiL5paHIOKGkiDorqHliJIg4oaSIOW3peWFtyDihpIg5Y+N6aaIIOKGkiDmo4Dmn6Ug4oaSIOiusOW/hjwvdGV4dD4KICA8ZGVmcz4KICAgIDxtYXJrZXIgaWQ9ImFycm93IiBtYXJrZXJXaWR0aD0iMTYiIG1hcmtlckhlaWdodD0iMTYiIHJlZlg9IjEyIiByZWZZPSI4IiBvcmllbnQ9ImF1dG8iPgogICAgICA8cGF0aCBkPSJNMiwyIEwxNCw4IEwyLDE0IFoiIGZpbGw9IiMyYzZlN2YiLz4KICAgIDwvbWFya2VyPgogICAgPGZpbHRlciBpZD0ic2hhZG93IiB4PSItMjAlIiB5PSItMjAlIiB3aWR0aD0iMTQwJSIgaGVpZ2h0PSIxNDAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjEyIiBzdGREZXZpYXRpb249IjE2IiBmbG9vZC1jb2xvcj0iIzE3MjEyYiIgZmxvb2Qtb3BhY2l0eT0iMC4xMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJjNmU3ZiIgc3Ryb2tlLXdpZHRoPSI3IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSI+CiAgICA8cGF0aCBkPSJNNzAwIDIwNSBDOTMwIDIwNSAxMTAwIDM1MCAxMTAwIDUyMCIvPgogICAgPHBhdGggZD0iTTEwODUgNTYwIEMxMDUwIDczNSA4ODAgODA1IDcwMCA4MDUiLz4KICAgIDxwYXRoIGQ9Ik02NTAgODA1IEM0MjAgODA1IDI2MCA2NjAgMjYwIDUyMCIvPgogICAgPHBhdGggZD0iTTI2MCA0ODAgQzI2MCAzMTUgNDMwIDIwNSA2NTAgMjA1Ii8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzaGFkb3cpIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3NSAxNzApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI1MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMjUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4xLiDnm67moIc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyNSIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaIkeimgeWujOaIkOS7gOS5iDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk0MCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4yLiDkuIrkuIvmloc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuadkOaWmeOAgeWBj+WlveOAgemZkOWItjwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkwMCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4zLiDorqHliJI8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuWFiOaLhuatpemqpOWGjeaJp+ihjDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3MCA3MTApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj40LiDlt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaWh+S7tuOAgeS7o+eggeOAgeihqOagvDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj41LiDlj43ppog8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPueci+e7k+aenO+8jOe7p+e7reaUuTwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj42LiDmo4Dmn6U8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuS6uuadpemqjOaUtuWSjOi0n+i0ozwvdGV4dD4KICAgIDwvZz4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTI1IDM5NSkiPgogICAgPHJlY3Qgd2lkdGg9IjM1MCIgaGVpZ2h0PSIxNjAiIHJ4PSIzMiIgZmlsbD0iI2VhZjVmMyIgc3Ryb2tlPSIjMmM2ZTdmIiBzdHJva2Utd2lkdGg9IjMiLz4KICAgIDx0ZXh0IHg9IjE3NSIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxZjU5NjciPuayiea3gOaIkOiusOW/hiAvIHNraWxsPC90ZXh0PgogICAgPHRleHQgeD0iMTc1IiB5PSIxMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjEiIGZpbGw9IiMzNTViNjQiPuaKiuS4gOasoee7j+mqjOWPmOaIkOS4i+asoeWPr+WkjeeUqOeahOa1geeoizwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=" alt="Agent 协作循环" />
+              <figcaption>Agent 协作循环：目标、工具、反馈、检查</figcaption>
+            </figure>
+            <figure>
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QXVkaWVuY2UgbWFwIGZvciBBZ2VudCBUaGlua2luZyAxMDE8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5BIGZvdXIgcXVhZHJhbnQgYXVkaWVuY2UgbWFwIHNob3dpbmcgaG93IEFnZW50IFRoaW5raW5nIGhlbHBzIHRlZW5hZ2VycywgYWR1bHRzLCBwYXJlbnRzLCB0ZWFjaGVycywgYW5kIHByb2R1Y3Rpdml0eSB0b29sIHVzZXJzLjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmOGZhZjkiLz4KICA8dGV4dCB4PSI3MDAiIHk9Ijc4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lkIzkuIDnp40gQWdlbnQg5oCd57u077yM5LiN5ZCM5Lq65pyJ5LiN5ZCM55So5rOVPC90ZXh0PgogIDx0ZXh0IHg9IjcwMCIgeT0iMTI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmaWxsPSIjNjU3MTdkIj7or77nqIvlrprkvY3kuI3lj6rlsZ7kuo7lsJHlhL/nvJbnqIvvvIzkuZ/kuI3lj6rlsZ7kuo7nqIvluo/lkZg8L3RleHQ+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTQiIHN0ZERldmlhdGlvbj0iMTgiIGZsb29kLWNvbG9yPSIjMTcyMTJiIiBmbG9vZC1vcGFjaXR5PSIwLjEyIi8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGcgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZThmNGYyIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzFmN2E4YyI+5bCRPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7pnZLlsJHlubQ8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lgZrkuKrkurrkuLvpobXjgIHlsI/muLjmiI/jgIHmlYXkuovkuabjgIHlrabkuaDliqnmiYs8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiuWFtOi2o+WPmOaIkOS9nOWTgTwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6KGo6L6+5oOz5rOV44CB6L+t5Luj44CB5bGV56S6PC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZmZmMWRmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2E2NWYwMCI+5oiQPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7miJDlubTkuro8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lpITnkIYgRXhjZWzjgIHmiqXlkYrjgIHosIPnoJTjgIHml4XooYzjgIHlsI/lt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiumHjeWkjeW3peS9nOa1geeoi+WMljwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6K6h5YiS44CB6aqM5pS244CB5rKJ5reAIHNraWxsPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDQ5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZWVmMGZmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzU0NTJhMyI+5a62PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lrrbplb8gLyDogIHluIg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7nkIbop6MgQUkg5pWZ6IKy44CB6L6555WM44CB5a6J5YWo5ZKM5L2c5ZOB5a+85ZCRPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrkuI3mioogQUkg5b2T5Luj5YaZ5ZmoPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJrmj5Dpl67jgIHmo4Dmn6XjgIHotJ/otKPku7vkvb/nlKg8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MjAgNDkwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSI1NjAiIGhlaWdodD0iMjUwIiByeD0iMjgiIGZpbGw9IiNmZmZmZmYiLz4KICAgICAgPGNpcmNsZSBjeD0iNzAiIGN5PSI3MiIgcj0iMzQiIGZpbGw9IiNmNGViZjgiLz4KICAgICAgPHRleHQgeD0iNzAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjN2E0YjhmIj7mlYg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iNzAiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxNzIxMmIiPuaViOeOh+W3peWFt+eUqOaItzwvdGV4dD4KICAgICAgPHRleHQgeD0iMTIwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MzYwNmMiPkNvZGV444CBQUkgQ29kaW5nIEFnZW5044CBTUNQ44CB6Ieq5Yqo5YyWPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrorqkgQUkg6L+b5YWl55yf5a6e5bel5L2c546w5Zy6PC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJror7vpobnnm67jgIHmlLnmlofku7bjgIHot5Hpqozor4E8L3RleHQ+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K" alt="适合人群地图" />
+              <figcaption>适合人群地图：青少年、成年人、家长老师、效率工具用户</figcaption>
+            </figure>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+window.__EMBEDDED_DOCS__ = {"course":"# Agent Thinking 101\n\n## 和 AI Agent 一起做事\n\n我最初想做的是少儿编程课。写着写着，我发现成年人也卡在同一个地方：工具已经装了，聊天也会了，可一碰到完整任务，还是不知道怎样把 AI 放进自己的工作里。\n\n于是课程范围慢慢变宽了。孩子可以做网页、小游戏和学习助手；成年人可以整理 Excel、写文档或搭小工具。会编程的人还能继续往 Codex、MCP 和 skills 走。大家用的功能不一样，但开头都一样：先把想做的事说清楚。\n\n## 写在前面：这门课到底想解决什么\n\n我身边不少朋友已经在用 ChatGPT、Gemini、豆包或 DeepSeek。平时改改文字、写个标题、翻译几句话，都没有问题。\n\n可我教他们用 Codex 时，经常会看到一种断层。他们会问一段代码是什么意思，却很少让 AI 先读完整个项目；会让 AI 写攻略，却不让它先问预算、同行人和旅行节奏。大家仍然习惯一句一句地下命令，好像 AI 只能在聊天框里活动。\n\n现在的 Agent 可以读文件、改代码、跑命令，也能根据报错继续修。表格、文档和浏览器里的任务也在往这个方向走。它不保证一次做对，但已经可以连续承担一段工作。\n\n这门课想练的是下面这些事：\n\n- 怎么把一个模糊想法说清楚。\n- 怎么让 AI 帮你拆任务，而不是只给答案。\n- 怎么让 AI 用工具做事，而不是只在聊天框里写字。\n- 怎么检查 AI 的结果，避免被它带着跑。\n- 怎么把重复工作沉淀成模板、skill 或自动化流程。\n- 怎么用 AI 学习、创作、工作、复盘自己。\n\n学完以后，至少应该能把一件事情交代完整，知道什么时候让 AI 继续，什么时候自己停下来检查。\n\n## 参考资料和调研结论\n\n公开的 Agent 教程不少，大多写给开发者。\n\nHugging Face 的 Agents Course 会讲工具、行动和观察，也带着学习者用 smolagents、LlamaIndex、LangGraph 做项目。内容完整，不过默认读者有 Python 基础。\n\nMicrosoft 的 AI Agents for Beginners 更接近工程课程，内容包括规划、记忆、多 Agent、RAG 和 MCP。想自己开发 Agent 的人会用得上，普通用户读起来会比较吃力。\n\nAnthropic 的 Building Effective Agents 提醒开发者别急着做全自动系统，很多任务用简单工作流更稳。文章列出的提示链、路由、并行和评审流程，也很适合拿来教普通人。\n\nOpenAI 和通义灵码的文档则把工具列得很具体：搜索、文件、代码执行、终端、MCP、computer use。模型能接触这些工具以后，才有机会把任务往下推进。\n\n我不想把这门课也写成框架手册。所以正文会先从旅行计划、照片工具、学习和表格这些场景讲起。等读者真的遇到“AI 需要读文件”或“这套流程想下次再用”的问题，再解释工具、记忆、MCP 和 skill。\n\n参考资料：\n\n- Hugging Face Agents Course: https://huggingface.co/learn/agents-course/unit0/introduction\n- Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents\n- Microsoft AI Agents for Beginners: https://github.com/microsoft/ai-agents-for-beginners\n- OpenAI Agents SDK docs: https://developers.openai.com/api/docs/guides/agents\n- OpenAI tools docs: https://developers.openai.com/api/docs/guides/tools\n- 通义灵码智能体模式: https://help.aliyun.com/zh/lingma/qoder-cn/user-guide/agent\n- UNESCO AI Competency Framework for Students: https://www.unesco.org/en/articles/ai-competency-framework-students\n- MIT Open Learning, AI Literacy, Explained: https://openlearning.mit.edu/news/ai-literacy-explained\n\n## 课程使用指南\n\n自学时，可以从头读到尾，每章做一次练习。别只收藏 prompt，最好当场打开一个 AI 工具试一遍，然后故意挑一处不满意的地方让它修改。\n\n给朋友试讲时，不必一次讲完十章。先用半小时比较聊天与 Agent 的差别，再用一小时做个人主页或旅行计划，已经足够看出这套课是否讲得通。\n\n正式开课可以做 4 节体验版，也可以拆成 10 节。前者用来测试内容，后者再加入作业、复盘和最终项目。\n\n### 四节体验课版本\n\n第 1 节：AI 不只是聊天机器人。  \n目标是让学习者理解：AI 不只是回答问题，还可以围绕目标做事。课堂上对比“帮我做网页”和“请先帮我拆需求，再生成网页”的差别。\n\n第 2 节：把想法说清楚。  \n目标是训练任务说明。学习者选择一个真实想法，写出目标、背景、对象、材料、约束和成功标准。\n\n第 3 节：做出第一个作品。  \n目标是体验从想法到作品。青少年可以做兴趣主页，成年人可以做旅行计划页面、照片工具或工作流模板。\n\n第 4 节：让 AI 成为长期助手。  \n目标是写出自己的 AI 使用手册，包括偏好、常做任务、检查标准和可以沉淀成 skill 的重复工作。\n\n### 十节系统课版本\n\n第 1 节：从聊天 AI 到 Agent。  \n第 2 节：任务说明和需求澄清。  \n第 3 节：先计划、再执行、再检查。  \n第 4 节：工具、上下文、记忆和 skill。  \n第 5 节：用 AI 学习学校科目和兴趣技能。  \n第 6 节：用 AI 创造网页、小工具和作品。  \n第 7 节：用 AI 处理成年人工作流。  \n第 8 节：Agent 工作流模式。  \n第 9 节：安全、边界和判断。  \n第 10 节：最终项目展示和复盘。\n\n### 这门课反复练什么\n\n术语记不住没关系。每一章都会回到这五件事：\n\n1. 我能不能把目标说清楚。\n2. 我能不能让 AI 先问问题。\n3. 我能不能让 AI 拆计划。\n4. 我能不能检查 AI 做得对不对。\n5. 我能不能把一次经验沉淀成以后可复用的流程。\n\n这五件事做顺了，换一个模型也不至于重新学起。\n\n## 第一章：AI 不只是聊天机器人\n\n### 1.1 过去我们怎么用 AI\n\n很多人第一次用 AI，会把它当成一个很聪明的聊天对象。\n\n比如：\n\n- “帮我润色这段话。”\n- “帮我写一份自我介绍。”\n- “这段英文是什么意思？”\n- “帮我总结这篇文章。”\n- “给我十个小红书标题。”\n\n这些用法很实用，只是范围比较窄。你给一段材料，它回一个结果；不满意，再追问一句。AI 不知道整件事为什么要做，也接触不到其他文件和工具。\n\n### 1.2 Agent 是什么\n\n“Agent”听起来有点玄。先把它理解成：\n\n> 一个能围绕目标，使用工具，持续推进任务的 AI 协作者。\n\n聊天 AI 主要给回答。Agent 还会拿工具往下做。\n\n一个普通聊天 AI 可以告诉你：“这个网页应该怎么写。”  \n一个 Coding Agent 可以真的帮你写文件、改样式、运行项目、看报错、继续修。\n\n一个普通聊天 AI 可以告诉你：“Excel 里可以用这个公式。”  \n一个 Agent 可以读取表格，检查字段，生成公式，跑一段分析，输出图表和报告草稿。\n\n一个普通聊天 AI 可以告诉你：“旅行计划可以这样安排。”  \n一个 Agent 可以先问你的偏好，查最新信息，生成路线，发现时间太赶后重新排，再把最终计划做成清单。\n\n这里比较的是工作方式，不是模型智商。\n\n### 1.3 Agent 的四个关键词\n\n先看目标。它可以很小，比如做一个照片浏览器；也可以是整理过去一年的博客，看看自己总在写什么。\n\n再看上下文。需求、偏好、项目文件和之前的决定都算上下文。材料不给够，AI 只能猜。\n\n工具决定它能不能动手。搜索、文件、浏览器、表格、终端和你自己的脚本，都可以成为工具。\n\n最后是反馈。代码报错就看报错，页面太挤就改排版。人也要把“不对劲”说出来，不然 AI 只会沿着第一版继续跑。\n\n### 1.4 一个小例子：从聊天到 Agent\n\n普通用法：\n\n```text\n帮我做一个个人主页。\n```\n\nAI 可能会给你一段 HTML，或者告诉你个人主页应该包含哪些部分。\n\nAgent 式用法：\n\n```text\n我想做一个个人主页，用来展示我的摄影作品和最近写的文章。\n目标用户是朋友和未来可能合作的人。\n我希望页面有：自我介绍、照片作品区、博客链接、联系方式。\n风格不要太花，干净一点，有一点杂志感。\n请先帮我拆需求，问我还缺哪些信息，然后给出一个实现计划。\n等我确认后，再开始生成第一版。\n```\n\n这个 prompt 没有秘诀，只是多给了背景，还要求 AI 先停下来问问题。\n\n### 1.5 本章练习\n\n找一个你最近真的想做的事情，写成两个版本。\n\n第一个版本用普通聊天方式：\n\n```text\n帮我……\n```\n\n第二个版本用 Agent 方式：\n\n```text\n我想完成……\n背景是……\n目标用户/使用场景是……\n我已有的材料是……\n限制条件是……\n怎样算做好……\n请先问我缺少的信息，再给我计划。\n```\n\n比较两次回答，记下第二次多问了什么、少猜了什么。这个差别比背模板更值得留意。\n\n## 第二章：把想法说清楚\n\n### 2.1 大多数人卡在“想法太糊”\n\n很多让人失望的回答，源头是任务太糊。\n\n比如：\n\n```text\n帮我写个方案。\n```\n\n什么方案？给谁看？目的是说服、汇报、执行，还是招生？要多长？语气要正式还是轻松？有没有已有资料？有没有必须避开的内容？怎样算好？\n\n如果这些都没说，AI 只能猜。\n\n人和人一起工作也是这样。你对朋友说“帮我弄一下”，朋友也会愣住。AI 只是把这个问题放大了。\n\n### 2.2 一个任务说明的六个部分\n\n写任务说明时，可以顺着六个问题想：要做什么，为什么做，给谁用，手上有什么，受哪些限制，怎样才算完成。\n\n不必每次写成正式表格。比如你想做旅行计划，预算和同行人就是限制；想写工作报告，读者和已有数据更要先交代。少了哪一项，AI 就会自己补空白，而且它补的未必合你心意。\n\n### 2.3 模板：把模糊想法变清楚\n\n可以用这个模板：\n\n```text\n我想完成：\n\n背景是：\n\n这个东西给谁用/给谁看：\n\n我已有的材料：\n\n限制条件：\n\n我希望最后输出：\n\n怎样算做好：\n\n请你先检查我的描述是否清楚。如果不清楚，先问我问题，不要急着开始做。\n```\n\n网页、旅行计划、Excel 和课程大纲都能用这套模板。用几次后，可以删掉那些你不需要的栏目。\n\n### 2.4 青少年例子：做一个兴趣主页\n\n普通说法：\n\n```text\n帮我做一个关于篮球的网页。\n```\n\n更好的说法：\n\n```text\n我想做一个篮球兴趣主页，用来展示我为什么喜欢篮球。\n这个网页主要给同学和家长看。\n内容包括：我喜欢的球星、我最近的训练记录、我想学习的技术动作、我最喜欢的一场比赛。\n我现在没有学过 HTML，只想先做一个简单但好看的网页。\n风格希望有运动感，但不要太乱。\n怎样算做好：打开网页后，别人能在 1 分钟内了解我的篮球兴趣，并且页面看起来不像作业。\n请先帮我拆页面结构，再问我还需要补充什么。\n```\n\n这段描述也在逼着孩子整理自己的想法：网页里到底要放什么，别人看完应该知道什么。\n\n### 2.5 成年人例子：处理 Excel\n\n普通说法：\n\n```text\n帮我分析这个表格。\n```\n\n更好的说法：\n\n```text\n我有一份销售数据表，想知道最近三个月不同产品线的销售表现。\n目标是给老板做一个简单汇报。\n我希望输出包括：总体趋势、表现最好的产品、下滑明显的产品、可能原因、下一步建议。\n请先检查表格字段是否足够。如果字段不够，请告诉我缺什么。\n分析时不要只给结论，也要说明你是根据哪些字段判断的。\n最后请输出一份适合放进汇报文档的摘要。\n```\n\n有了业务目标和检查要求，AI 才知道该分析哪些字段，而不是随便画几张图。\n\n### 2.6 本章练习\n\n选一个你自己的真实任务，写一份任务说明。\n\n可以从这些方向选：\n\n- 做一个个人主页。\n- 设计一次旅行。\n- 学一个新技能。\n- 整理一个表格。\n- 写一份报告。\n- 做一个小工具。\n- 复盘自己过去一年的经历。\n\n写完后，让 AI 帮你检查这份任务说明：\n\n```text\n请你帮我检查这个任务说明。\n哪些地方清楚？哪些地方不够清楚？\n如果你要执行这个任务，你还需要问我哪 5 个问题？\n```\n\n如果 AI 提不出问题，通常说明任务还停在泛泛而谈的层面。\n\n## 第三章：从“要答案”到“要过程”\n\n### 3.1 为什么不要急着要最终答案\n\n很多人用 AI，会直接要结果。\n\n比如：\n\n```text\n帮我写完这篇作文。\n```\n\n```text\n帮我直接生成完整代码。\n```\n\n```text\n帮我给出投资建议。\n```\n\n直接拿最终答案当然省事，可你很难判断它在哪一步走偏了。写代码、做数据或学习新东西时，这个问题尤其明显。\n\n可以先让 AI 复述任务、问几个问题，再列计划。你看过计划以后再让它动手，出错时也比较容易找到位置。\n\n### 3.2 一个好流程：先计划，再执行\n\n很多任务都可以用这个流程：\n\n1. 说明目标。\n2. 让 AI 复述理解。\n3. 让 AI 提问补充信息。\n4. 让 AI 给出计划。\n5. 人确认计划。\n6. AI 执行第一步。\n7. 人检查结果。\n8. AI 继续修改。\n9. 最后总结经验。\n\n前面多花几分钟，往往能省掉后面整段推倒重来的时间。\n\n### 3.3 让 AI 先问你问题\n\n一个非常简单但有效的句子是：\n\n```text\n如果我的描述还不够清楚，请先问我问题，不要急着给答案。\n```\n\n这句话的作用很朴素：先把缺的信息补上。\n\n比如你说：\n\n```text\n我想学摄影，请帮我制定学习计划。如果我的目标不清楚，请先问我问题。\n```\n\nAI 可能会问：\n\n- 你现在用什么设备？\n- 你更喜欢人像、街拍、风景还是静物？\n- 你每周能练习几次？\n- 你想先学拍摄，还是后期？\n- 你希望一个月后达到什么效果？\n\n回答完这些问题，“学摄影”才会变成一份适合你的练习安排。\n\n### 3.4 让 AI 暴露检查方法\n\n另一个好句子是：\n\n```text\n每一步完成后，请告诉我应该怎么检查结果。\n```\n\n比如写网页，检查方法可以是：\n\n- 页面能不能打开。\n- 文字有没有溢出。\n- 手机上是否能看。\n- 图片是否正常加载。\n- 按钮点击后有没有反应。\n\n比如处理 Excel，检查方法可以是：\n\n- 总数是否和原表一致。\n- 是否有空值或异常值。\n- 分组字段是否正确。\n- 公式是否覆盖所有行。\n- 结论是否符合业务常识。\n\n检查方法最好在执行前就说好。等结果出来再临时找标准，很容易被一份看起来漂亮的答案糊弄过去。\n\n### 3.5 本章练习\n\n找一个你想让 AI 帮你完成的任务，要求 AI 按下面格式工作：\n\n```text\n请按这个流程帮我：\n1. 先复述你理解的目标。\n2. 再问我 3 到 5 个必要问题。\n3. 然后给出执行计划。\n4. 等我确认后，只执行第一步。\n5. 每一步结束后告诉我怎么检查。\n```\n\n做完后，看看 AI 的计划有没有帮你发现原来没想到的问题。\n\n## 第四章：工具、上下文和记忆\n\n### 4.1 Agent 为什么比聊天 AI 更强\n\n聊天模型能写得很好，可很多任务还要碰文件、网页和代码。Agent 的差别就在这里。\n\n它需要读文件。  \n它需要查网页。  \n它需要跑代码。  \n它需要看表格。  \n它需要记住你的偏好。  \n它需要知道上一步做了什么。  \n它需要在失败后换一种办法。\n\n少一个环节，任务都可能停住。能写代码却不能运行，就不知道有没有报错；能读表格却不理解业务目标，也只能做表面统计。\n\nOpenAI 的工具文档里把 web search、file search、code interpreter、remote MCP、skills、shell、computer use 等都列为可用工具。通义灵码的智能体模式也会使用工程检索、文件编辑、终端等工具。不同平台叫法不同，但底层逻辑类似：让模型不只生成文本，而是可以调用外部能力。\n\n### 4.2 什么是上下文\n\n上下文就是 AI 做当前任务需要知道的背景。\n\n它可以包括：\n\n- 你的目标。\n- 你的偏好。\n- 你之前做过的决定。\n- 你的文件。\n- 你的项目结构。\n- 你的写作风格。\n- 你的限制条件。\n- 你的历史材料。\n\n每次从零开始，AI 就会反复猜你的偏好。\n\n比如你让 AI 帮你写文章，但不给它你的博客风格，它只能写成一种很普通的 AI 腔。你让 AI 帮你改代码，但不给它项目文件，它只能给通用建议。你让 AI 帮你设计学习计划，但不告诉它你的时间和基础，它只能给一份看起来正确但很难执行的计划。\n\n### 4.3 什么是记忆\n\n记忆是长期上下文。\n\n比如：\n\n- 我喜欢直接、温和、有一点个人感的文字。\n- 我不喜欢太商业化的表达。\n- 我正在做一套 Agent 思维教程。\n- 我平时会用 Codex 帮我写代码和整理文档。\n- 我对摄影、化妆、写作、AI 工具、个人复盘感兴趣。\n- 我希望学习计划不要太鸡血，要能落地。\n\n如果这些信息会反复用，可以写进 memory、项目说明或个人手册。以后只需补充这次任务的变化。\n\n### 4.4 什么是 skill\n\nskill 可以先理解成一份“给 AI 用的操作手册”。\n\n当某件事你会反复做，就可以把规则写下来，让 AI 以后按照这套规则执行。\n\n比如：\n\n- 每次帮我整理小红书博主资料时，要先提取账号信息、内容主题、爆款结构、视觉风格，再写总结。\n- 每次帮我写博客时，要保持口语化，不要太像营销文。\n- 每次帮我处理照片库时，要先扫描文件夹，再随机展示 9 张，再记录 star。\n- 每次帮我做旅行计划时，要先问预算、节奏、兴趣、同行人、交通限制。\n\nskill 说白了就是一份给 AI 看的操作说明。最值得写的，通常是那些你已经做过三四遍、步骤差不多、又总有几个地方容易出错的事情。\n\n### 4.5 本章练习\n\n写一份“我的 AI 使用手册”。\n\n可以包含：\n\n```text\n我的基本信息：\n\n我常做的任务：\n\n我喜欢的输出风格：\n\n我不喜欢的输出风格：\n\n我希望 AI 每次都先问的问题：\n\n我常用的检查标准：\n\n我希望沉淀成 skill 的重复任务：\n```\n\n先写一个粗糙版本就行。用过几次以后，把真正有用的规则留下，没用的删掉。\n\n## 第五章：让 AI 帮你学习\n\n### 5.1 AI 不是答案机，而是教练\n\n学习大概是 AI 最容易用歪的地方。答案来得太快，人很容易跳过自己卡住的那几分钟。\n\n我更愿意把它当成陪练：它可以出题、换一种解释、指出错误，但那一步真正的推理还是得自己走。\n\n具体可以让它做这些事：\n\n- 用不同难度解释一个概念。\n- 给你出练习题。\n- 根据错题分析薄弱点。\n- 帮你制定复习计划。\n- 用你感兴趣的例子讲知识。\n- 让你先回答，再给反馈。\n\n### 5.2 学学校科目\n\n比如学数学，不要说：\n\n```text\n这道题答案是什么？\n```\n\n可以说：\n\n```text\n请你像老师一样教我这道题。\n不要直接给答案。\n先问我看到题目后的第一反应。\n如果我卡住了，给我提示，不要一步到位。\n最后请总结这类题的解法，并出两道同类题让我练习。\n```\n\n关键是让它先听你的想法。连第一步都没尝试，AI 也不知道你究竟卡在哪里。\n\n### 5.3 学兴趣技能\n\n成年人学兴趣技能时也可以这么用。\n\n比如学摄影：\n\n```text\n我想学摄影，现在主要用手机拍照。\n我喜欢城市街景、咖啡馆、人物侧影，不太喜欢摆拍。\n请帮我设计一个 4 周练习计划。\n每周给我 3 个拍摄任务，每个任务说明练什么、怎么拍、怎么检查照片。\n```\n\n比如学化妆：\n\n```text\n我想从零开始学日常通勤妆。\n我不想一开始买太多东西，也不喜欢很浓的妆。\n请先问我肤质、预算、已有工具和想要的风格。\n然后给我一个低成本入门路线。\n```\n\n比如学投资：\n\n```text\n我想学习投资入门。\n请不要给我具体买卖建议，也不要推荐个股。\n请先从风险、资产类别、长期收益、分散配置和常见误区开始教。\n每一节后给我一个小练习，帮我检查我是否真的理解。\n```\n\n投资例子只用于学概念。具体买卖牵涉个人风险，别把决定交给模型。\n\n### 5.4 让 AI 根据你调整难度\n\n学习材料太简单会无聊，太难又容易放弃。AI 的方便之处是可以马上换一种解释，不用硬撑着读同一段话。\n\n你可以说：\n\n```text\n请用三个版本解释这个概念：\n1. 小学生能懂的版本。\n2. 高中生能懂的版本。\n3. 给成年人快速入门的版本。\n```\n\n或者：\n\n```text\n我刚才没听懂。\n请不要换一个更高级的说法，而是换一个更生活化的例子。\n```\n\n### 5.5 本章练习\n\n选择一个你想学的东西，让 AI 帮你设计一个 7 天入门计划。\n\n要求：\n\n- 每天不超过 30 分钟。\n- 每天有一个小任务。\n- 每天有一个检查方法。\n- 第 7 天做一个小作品或小总结。\n\n最后让 AI 问你：\n\n```text\n你觉得这个计划哪里太难？哪里太简单？根据我的回答重新调整。\n```\n\n## 第六章：让 AI 帮你创造作品\n\n### 6.1 创造作品是最好的学习\n\n光听概念很难知道 Agent 到底好不好用。做一个自己的东西，问题会马上冒出来。\n\n一个网页。  \n一个小游戏。  \n一个照片工具。  \n一个学习助手。  \n一个旅行计划生成器。  \n一个个人知识库。  \n一个 Excel 自动分析流程。\n\n作品不用复杂。一个只解决自己问题的小工具，通常比照着教程复刻一个“大项目”更有意思。\n\n### 6.2 为什么这对青少年很重要\n\n传统少儿编程很容易从语法开始。先学变量，再学循环，再学函数，再学项目。这个路径有价值，但很多孩子会在中间失去兴趣。\n\n可以把顺序倒过来，先问孩子想做什么。\n\n他喜欢篮球，就做篮球主页。  \n她喜欢画画，就做作品展示网站。  \n他喜欢游戏，就做一个简单小游戏。  \n她喜欢历史，就做一个历史人物问答助手。\n\n代码还是要学，只是它可以晚一点出现。孩子先看到作品能跑，再回头理解变量和函数，往往更容易知道自己为什么要学。\n\n### 6.3 一个作品的标准流程\n\n可以用这个流程：\n\n1. 说出想法。\n2. 让 AI 帮你提问。\n3. 写项目 brief。\n4. 让 AI 生成第一版。\n5. 运行或打开看看。\n6. 说出哪里不满意。\n7. 让 AI 修改。\n8. 加入自己的内容。\n9. 展示给别人看。\n10. 记录下一步想改什么。\n\n第 6 步最值得留时间。AI 的第一版往往很像模板，找出哪里不像自己、哪里不能用，才是项目真正开始的地方。\n\n### 6.4 项目一：个人主页\n\n适合青少年，也适合成年人。\n\n任务说明可以这样写：\n\n```text\n我想做一个个人主页。\n它不是简历，而是展示我这个人。\n内容包括：我是谁、我喜欢什么、我最近在做什么、我想展示的作品、联系方式。\n风格希望干净、有个人感，不要太像模板。\n请先帮我设计页面结构，再给我第一版 HTML/CSS。\n生成后告诉我怎么在本地打开。\n```\n\n完成后可以继续让 AI 修改：\n\n```text\n这个页面太像模板了。\n请让它更像一个真实的人写的页面，减少空话，增加一些生活化细节。\n颜色不要太花，字体层级更清楚一点。\n```\n\n### 6.5 项目二：本地照片浏览和收藏工具\n\n这个项目来自我自己的小麻烦：照片下载了很多，平时根本不会再翻。我想每次随机看 9 张，喜欢的就加星，慢慢把真正想留下的挑出来。\n\n目标：\n\n- 从本地照片文件夹随机展示 9 张。\n- 可以刷新下一组。\n- 可以给喜欢的照片 star。\n- 可以查看收藏列表。\n\n需求很小，但恰好适合课堂。它能让人看到，没必要等某家公司做一个功能完全对口的软件。\n\n任务说明：\n\n```text\n我想做一个本地照片浏览工具。\n它从我指定的照片文件夹里随机展示 9 张图片。\n每张图片旁边有一个 star 按钮，点了以后记录到收藏列表。\n我希望这个工具优先简单可用，可以先用本地网页实现。\n请先问我运行环境和照片路径相关问题，再给出最简单实现方案。\n```\n\n第一版只要能随机显示和收藏就够了。分类、搜索和漂亮动画都可以以后再说。\n\n### 6.6 项目三：学习助手\n\n青少年可以做“我的英语单词助手”或“我的错题练习助手”。成年人可以做“我的投资学习助手”或“我的摄影练习助手”。\n\n任务说明：\n\n```text\n我想做一个学习助手，用来帮我学习摄影。\n它需要记录我正在学的主题，每天给我一个小练习，并让我写下复盘。\n我希望它不是直接给我一堆知识，而是能引导我练习。\n请先帮我设计功能，再生成一个简单网页原型。\n```\n\n### 6.7 本章练习\n\n从下面选择一个作品，做第一版：\n\n- 个人主页。\n- 兴趣展示网站。\n- 本地照片浏览工具。\n- 学习打卡工具。\n- 旅行计划页面。\n- 小游戏。\n- AI 故事书。\n\n要求很简单：第一版能打开，能展示，能讲清楚你为什么做它。\n\n## 第七章：让 AI 帮成年人干活\n\n### 7.1 成年人常把 AI 用得太零碎\n\n很多成年人用 AI，也会卡在“局部帮忙”。\n\n写文档时，让 AI 改一段。  \n做表格时，让 AI 给一个公式。  \n写代码时，让 AI 解释一段报错。  \n做调研时，让 AI 总结一篇文章。\n\n问题不在这些小用法，而在每次都从头开始。如果一件事每周都做，值得把步骤和检查标准留下来。\n\n### 7.2 Excel 和数据\n\n处理表格时，不要一上来就问“帮我分析”。更好的流程是：\n\n1. 说明业务目标。\n2. 让 AI 检查字段。\n3. 让 AI 找缺失值和异常值。\n4. 让 AI 提出分析维度。\n5. 人确认哪些维度有意义。\n6. 让 AI 生成统计、图表或公式。\n7. 人检查结论是否符合常识。\n8. 让 AI 写成报告。\n\n通用 prompt：\n\n```text\n我需要分析一份表格。\n请不要直接下结论。\n先帮我检查字段含义、缺失值、异常值和可能的分析维度。\n然后给我一个分析计划。\n等我确认后，再开始计算或写公式。\n最后输出一份可以给同事看的摘要。\n```\n\n### 7.3 文档和汇报\n\n文档工作通常材料多、步骤重复，很适合先整理成流程。\n\n比如：\n\n- 会议纪要。\n- 项目周报。\n- 竞品调研。\n- 课程大纲。\n- 招生文案。\n- 个人复盘。\n- 读书笔记。\n\n比如可以这样做：\n\n1. 收集原始材料。\n2. 让 AI 先提炼信息结构。\n3. 让 AI 找缺口。\n4. 人补充背景。\n5. AI 写初稿。\n6. 人指出风格问题。\n7. AI 改写。\n8. AI 自查是否有空话、重复、逻辑跳跃。\n\n### 7.4 软件开发和小工具\n\nAI Coding Agent 降低了做小工具的门槛。你不必先把前端、后端和数据库全学完，很多个人需求可以从本地网页或脚本开始。\n\n比如：\n\n- 批量重命名文件。\n- 整理下载文件夹。\n- 做照片浏览器。\n- 把 CSV 生成图表。\n- 做一个个人账本。\n- 做一个旅行计划页面。\n- 做一个课程资料整理工具。\n\n使用 Codex 或类似工具时，可以这样开头：\n\n```text\n请先阅读这个项目结构，告诉我它是什么技术栈。\n我想增加一个功能：……\n请先给出修改计划，不要直接改。\n计划里说明要改哪些文件、为什么改、怎么验证。\n等我确认后再执行。\n```\n\n### 7.5 把重复工作沉淀成 skill\n\n看到重复工作时，先别急着自动化。可以检查它是否真的稳定：\n\n判断一个任务是否适合变成 skill，可以问：\n\n- 这件事我是不是做过三次以上？\n- 每次步骤是不是差不多？\n- 判断标准是不是能写出来？\n- 输入和输出是不是相对固定？\n- 如果 AI 帮我做 70%，我是否愿意人工检查剩下 30%？\n\n大部分答案是“是”，再把它写成 skill 或工作流。判断特别多、每次情况差异很大的任务，硬自动化反而麻烦。\n\n### 7.6 本章练习\n\n列出你工作或生活中最重复的 5 件事。\n\n每件事写：\n\n- 输入是什么。\n- 输出是什么。\n- 中间步骤是什么。\n- 哪些地方必须人判断。\n- 哪些地方可以交给 AI。\n\n然后选一个，写成一份 skill 草稿。\n\n## 第八章：Agent 工作流\n\n### 8.1 不要一开始追求全自动\n\n很多人听到 Agent，会想象一个完全自动的 AI：你说一句话，它自己全做完。\n\n完全自动听起来很省事，可任务一旦碰到钱、隐私、删除文件或对外发布，人就得留在流程里。\n\n初学时先做可控的工作流更实际。\n\n工作流只是把步骤写清楚。哪里自动，哪里停下来等人确认，也一起写进去。\n\n### 8.2 提示链\n\n提示链就是一步接一步。\n\n例子：\n\n1. 先写大纲。\n2. 检查大纲。\n3. 根据大纲写初稿。\n4. 检查初稿。\n5. 润色。\n6. 输出最终版。\n\n适合写文章、写方案、做课程、做报告。\n\nprompt：\n\n```text\n请不要一次性写完。\n我们按链式流程来：\n第一步只输出大纲。\n等我确认后，再写正文。\n正文写完后，再单独做一次自查和润色。\n```\n\n### 8.3 路由\n\n路由就是先判断类型，再交给不同处理方式。\n\n比如你有很多用户反馈：\n\n- 有些是 bug。\n- 有些是功能建议。\n- 有些是投诉。\n- 有些是表扬。\n\n你可以让 AI 先分类，再分别处理。\n\n生活里也可以用：\n\n- 学习问题交给学习教练。\n- 写作问题交给写作编辑。\n- 技术问题交给工程助手。\n- 情绪复盘交给反思助手。\n\n### 8.4 并行\n\n并行就是让 AI 同时给多个方案。\n\n比如：\n\n```text\n请给我三个不同方向的个人主页设计：\n1. 极简文字型。\n2. 摄影作品集型。\n3. 轻博客型。\n每个方案说明适合什么人、优点、缺点。\n```\n\n创作时先看几个方向，能避免被 AI 的第一个答案带着走。\n\n### 8.5 指挥者-执行者\n\n任务变复杂以后，可以把拆解和执行分开。\n\n一个“指挥者”负责拆任务、安排顺序、汇总结果。多个“执行者”负责具体子任务。\n\n比如做一个课程：\n\n- 指挥者：设计整体结构。\n- 执行者 A：调研公开资料。\n- 执行者 B：写青少年案例。\n- 执行者 C：写成年人案例。\n- 执行者 D：检查语言是否太 AI。\n\n你不一定真的开多个 Agent，也可以在一个对话里模拟这个流程。\n\n### 8.6 评审-优化\n\n评审和修改是最常用的一组动作。\n\n一个 AI 负责生成，另一个视角负责挑问题。或者同一个 AI 先生成，再切换成审稿人。\n\nprompt：\n\n```text\n请先作为作者写第一版。\n写完后，切换成挑剔但友好的审稿人，检查：\n1. 有没有空话。\n2. 有没有逻辑跳跃。\n3. 有没有太像 AI 的句子。\n4. 有没有读者看不懂的术语。\n5. 有没有可以删掉的段落。\n最后根据审稿意见给出第二版。\n```\n\n### 8.7 本章练习\n\n用“评审-优化”流程改一篇你自己的文字。\n\n要求 AI 先指出问题，不要急着重写。你确认哪些建议有用后，再让它改。\n\n如果 AI 的评审意见不成立，也要明确拒绝。它是帮手，不是裁判。\n\n## 第九章：安全、边界和判断\n\n### 9.1 AI 会犯错\n\nAI 很有用，但它会犯错。\n\n它会编不存在的资料。  \n它会算错。  \n它会误解你的意思。  \n它会把看起来合理的话写得很自信。  \n它会在没有足够信息时假装知道。\n\n所以检查不能留到最后随便看一眼。最好在任务开始前就想好怎么验收。\n\n### 9.2 哪些事情必须小心\n\n以下场景要特别谨慎：\n\n- 隐私数据。\n- 身份证、手机号、家庭住址、银行卡。\n- 公司内部资料。\n- 未公开商业信息。\n- 医疗、法律、投资等高风险决策。\n- 自动删除、批量发送、付款、下单。\n- 学校作业和考试。\n\n这些任务可以让 AI 帮忙整理和起草，但最终决定、发送和付款都要由人确认。\n\n### 9.3 三条基本规则\n\n第一，重要事实要查来源。\n\n不要因为 AI 写得像真的，就当成真的。涉及数据、政策、价格、法律、医学、新闻，都要查来源。\n\n第二，重要操作要人确认。\n\n让 Agent 改文件、发邮件、删数据、执行命令之前，人要知道它要做什么。\n\n第三，学习任务要保留自己的思考。\n\nAI 可以讲解、提示、出题、检查，但不要直接替你完成应该由你完成的作业。\n\n### 9.4 给青少年的边界\n\n青少年使用 AI 时，规则要说得具体。\n\n可以做：\n\n- 让 AI 解释知识。\n- 让 AI 出练习题。\n- 让 AI 检查草稿。\n- 让 AI 帮自己做作品。\n- 让 AI 提醒哪里需要验证。\n\n不应该做：\n\n- 直接让 AI 代写作业。\n- 上传同学或家庭隐私。\n- 完全相信 AI 给出的事实。\n- 在没有大人知道的情况下使用涉及钱或账号的工具。\n\n### 9.5 给成年人的边界\n\n成年人更容易在“省时间”的诱惑下跳过检查。\n\nAI 写的报告，要看。  \nAI 算的数据，要复核。  \nAI 写的代码，要跑。  \nAI 给的投资知识，可以学，但不能当成买卖建议。  \nAI 帮你处理公司资料，要注意保密。\n\n报告、代码和数据都可以让 AI 起草或处理，但责任不会因此转给模型。\n\n### 9.6 本章练习\n\n写一份你的 AI 使用边界。\n\n```text\n我可以让 AI 帮我做：\n\n我暂时不让 AI 做：\n\n涉及隐私时，我会：\n\n涉及钱、健康、法律时，我会：\n\nAI 输出重要结论时，我会如何检查：\n```\n\n写完后放在常用项目里。真正遇到敏感资料或自动操作时，再拿出来对照。\n\n## 第十章：最终项目\n\n### 10.1 为什么要有最终项目\n\n最后还是要做一个自己的项目。只听懂概念，很难知道自己会在哪一步卡住。\n\n项目不用大，满足下面几点就够：\n\n- 它来自真实需求。\n- 它能展示或能使用。\n- 它包含一次人和 AI 的迭代过程。\n\n### 10.2 青少年项目方向\n\n可以选择：\n\n- 我的个人主页。\n- 我的兴趣展示网站。\n- 我的 AI 故事书。\n- 我的学习助手。\n- 我的小游戏。\n- 我的班级知识问答页面。\n- 我的旅行计划页面。\n\n最终交付：\n\n- 作品链接或截图。\n- 项目说明。\n- 我怎么和 AI 说需求。\n- AI 第一版哪里不好。\n- 我怎么让 AI 修改。\n- 我学到了什么。\n\n### 10.3 成年人项目方向\n\n可以选择：\n\n- 我的 Excel 分析流程。\n- 我的工作周报助手。\n- 我的旅行计划工作流。\n- 我的个人复盘助手。\n- 我的照片整理工具。\n- 我的资料总结 skill。\n- 我的代码开发助手。\n\n最终交付：\n\n- 工作流说明。\n- 输入和输出。\n- 可复用 prompt 或 skill。\n- 检查清单。\n- 节省了什么时间。\n- 哪些步骤仍然需要人判断。\n\n### 10.4 项目模板\n\n```text\n项目名称：\n\n我为什么想做它：\n\n这个项目给谁用：\n\n我希望它能完成什么：\n\n我已有的材料：\n\n我使用的 AI 工具：\n\n我给 AI 的第一版任务说明：\n\nAI 给出的第一版结果：\n\n我发现的问题：\n\n我让 AI 怎么修改：\n\n最终结果：\n\n我怎么检查它：\n\n下一步想改进：\n```\n\n### 10.5 课程结束以后\n\n今天用的是 Codex、ChatGPT、Gemini、DeepSeek 或 GLM，过一阵子工具名单还会变。课程里那些按钮和菜单不一定耐用。\n\n更值得留下的是做项目时形成的习惯：需求写清楚，计划先看，结果自己验收；一件事做顺以后，把步骤留给下次。孩子可以用这套习惯做作品，成年人可以少做一些重复劳动。\n\n课程结束后，不妨继续维护自己的 AI 使用手册。过几个月再回来看，删掉没用的规则，补上新踩过的坑。这比收藏一百条“万能 prompt”更接近真实使用。\n","outline":"# Agent Thinking 101: 和 AI Agent 一起做事\n\n## 0. 课程定位\n\n这份大纲最早按少儿编程来写。后来范围扩到了成年人，因为很多人虽然会用 ChatGPT 或 Gemini，却还是把 AI 当成一句一答的聊天工具。\n\n课程会教人把目标、材料和限制交代清楚，让 Agent 先计划，再使用工具执行。结果做得不对，人要能看出来，也要知道怎样让它改。\n\n同一套方法会落到不同场景：\n\n- 青少年版：用 Agent 创造网页、小游戏、故事、学习助手和个人作品。\n- 成年人版：用 Agent 处理文档、Excel、数据分析、写代码、自动化日常工作。\n- 家长/教师版：理解 AI Agent 的价值、边界、安全和教学方式。\n- 开发者/效率工具用户版：理解 Codex、AI Coding Agent、skills、MCP 和个人工作流。\n\n## 1. 为什么不只做“少儿编程”，而是“Agent 思维”\n\n传统少儿编程通常围绕 Scratch、Python、C++、竞赛或计算思维展开。它的价值仍然存在，但 AI 时代的新问题变成了：\n\n- 孩子不一定先学完语法，才能做出作品。\n- 成年人不一定是程序员，也可以用 Agent 完成复杂工作。\n- 学习的重点不只是“我会不会写代码”，而是“我能不能把想法变成可执行任务”。\n- AI 不只是回答问题，而是可以参与计划、执行、检查、迭代。\n\n成年人也常停在局部提问、局部改写和局部总结。课程因此不绑定某个年龄，也不绑定某个工具。它主要练一件事：\n\n> 把模糊想法变成清晰目标，把清晰目标拆成步骤，把步骤交给 AI 和工具协作执行，再用人的判断检查结果。\n\n## 2. Agent 相比普通聊天 AI 的进步\n\n普通聊天 AI 的典型使用方式是：用户问一句，AI 回一句。它可以解释概念、写文本、生成代码片段，但大多数时候停留在“对话”和“生成内容”。\n\nAgent 的进步在于它更接近“做事系统”：\n\n- **目标感**：Agent 可以围绕一个目标连续工作，而不是只回答单个问题。\n- **任务拆解**：Agent 可以把复杂任务拆成多个步骤，并动态调整计划。\n- **工具调用**：Agent 可以使用搜索、代码执行、文件读写、浏览器、日历、表格、数据库等工具。\n- **环境反馈**：Agent 会根据工具结果、报错、页面变化、文件内容继续判断下一步。\n- **记忆与上下文**：Agent 可以保留偏好、项目背景、历史决策，让后续协作更顺。\n- **检查与迭代**：Agent 可以生成结果，也可以检查结果、修复问题、总结经验。\n- **半自动执行**：人提出目标和边界，Agent 在中间承担大量执行劳动。\n\n- 聊天 AI 更像“会说话的老师或助手”。\n- Agent 更像“能拿工具干活的项目搭子”。\n\n具体到使用上，就是会准备目标和上下文，知道它能用哪些工具，也提前想好怎么检查。\n\n## 3. 公开 Agent 教程调研摘要\n\n目前公开的 Agent 教程大多偏技术实现，适合开发者，但不一定适合青少年、家长或普通职场人。\n\n### 3.1 Hugging Face Agents Course\n\nHugging Face 的 Agents Course 是完整的开发者课程，覆盖 Agent 基础、框架、Agentic RAG、最终项目和认证。它会讲 tools、thoughts、actions、observations、smolagents、LlamaIndex、LangGraph 等内容。\n\n对我们的启发：\n\n- 它证明 Agent 教育已经是一个明确方向。\n- 它强调理论加实践，最后要做项目。\n- 但它要求基础 Python，更偏开发者，不适合作为青少年或普通人的第一门课。\n\n### 3.2 Anthropic: Building Effective Agents\n\nAnthropic 把 agentic systems 分成 workflow 和 agents。workflow 是预先写好的路径，agent 是模型根据任务动态决定流程和工具使用。它也强调一个重要原则：尽量从简单、可组合的模式开始，而不是一开始堆复杂框架。\n\n对我们的启发：\n\n- “简单可组合”非常适合教学。\n- 青少年和成年人不需要一开始学习复杂框架，可以先理解 prompt chaining、routing、parallelization、orchestrator-workers、evaluator-optimizer 这些工作模式。\n- Agent 教育要强调检查点、环境反馈和人类判断。\n\n### 3.3 OpenAI Agents / Tools 相关文档\n\nOpenAI 的开发者文档列出了 Agents SDK、工具调用、MCP、Computer Use、File Search、Code Interpreter 和 Shell。模型接上这些工具以后，才能读文件、操作环境并继续执行。\n\n对我们的启发：\n\n- 教程里要让学习者看到“工具”这个概念。\n- 对青少年，可以用浏览器、网页生成、图片、文档作为工具入口。\n- 对成年人，可以用 Excel、文件、代码、搜索、日程、自动化作为工具入口。\n\n## 4. 本教程和现有教程的区别\n\n现有教程常见的门槛：\n\n- 太偏技术框架，普通人看不懂。\n- 太偏 prompt 模板，无法迁移到真实任务。\n- 太偏工具介绍，今天讲一个软件，明天软件就变了。\n- 太少讨论人的角色：目标、判断、边界、审美、责任。\n\n这份教程的取舍：\n\n- 先讲思维，再讲工具。\n- 先讲真实任务，再讲技术概念。\n- 先让学习者做出作品，再逐步解释背后的原理。\n- 既适合青少年创造作品，也适合成年人处理工作。\n- 强调人和 Agent 的协作关系，而不是把 AI 当成答案机器。\n\n## 5. 为什么要教这个：作者真实场景\n\n这套教程可以从一个很真实的观察开始：\n\n很多人已经在用 Gemini、ChatGPT、豆包、DeepSeek 或 GLM，但仍然停留在比较基础的使用方式上。他们会让 AI 改一段文字、写一个小段落、总结一篇文章，或者回答一个局部问题。这些用法当然有价值，但它们只用到了 AI 的一小部分能力。\n\n现在更重要的变化是：AI 已经可以承担一段相对独立的工作。只要人能把目标、背景、约束和检查标准说清楚，Agent 就可以帮人拆任务、查资料、读文件、写代码、改错误、整理输出，甚至把重复的电脑操作沉淀成 skill 或工作流。\n\n这也是本教程想降低的门槛：\n\n- 不让高昂订阅费、复杂环境和信息差，把普通人挡在 AI 能力之外。\n- 不让用户只停留在“让 AI 改一段文字”的阶段。\n- 让学习者意识到，自己电脑上的很多重复劳动，都可以被整理成可复用的 Agent 工作流。\n- 让青少年知道，AI 不只是帮忙写作业，而是可以帮他们创造作品。\n- 让成年人知道，AI 不只是聊天工具，而是可以处理工作、学习和生活的协作者。\n\n### 5.1 教朋友使用 Codex\n\n一个重要起点是：身边朋友可能已经会用 ChatGPT 或 Gemini，但还没有形成 Codex / Agent 式的工作方式。\n\n他们习惯把任务切得很碎，一段一段交给 AI，例如：\n\n- 改一段文案。\n- 翻译一段内容。\n- 总结一个材料。\n- 写一点代码片段。\n\n但 Agent 式的方式是把完整目标交给 AI：\n\n- 帮我理解这个项目，并找出我应该从哪里改。\n- 帮我写一个小工具，运行起来并自己检查报错。\n- 帮我把这个重复工作做成脚本或 skill。\n- 帮我读这些资料，总结成可执行计划。\n\n这里借 Codex 讲的是怎样让 AI 进入项目现场。以后工具换了，这套用法仍然能迁移。\n\n### 5.2 把重复工作做成 skill 或工作流\n\n很多人的电脑里都有重复劳动：\n\n- 每周整理表格。\n- 固定格式写报告。\n- 批量处理图片或文件。\n- 从网页收集信息。\n- 把资料转成笔记。\n- 把某类任务拆解成固定流程。\n\n传统做法是每次手工做一遍。Agent 思维会问：\n\n> 这件事能不能被描述成一套稳定流程？能不能让 AI 先学会规则，再帮我半自动执行？\n\n这可以进一步变成 skill、脚本、模板或个人工作流。普通人不一定要先成为程序员，也可以先学会识别“哪些任务值得自动化”。\n\n### 5.3 用 AI 做个人复盘和自我理解\n\nAgent 不只可以处理外部任务，也可以帮助人整理自己。\n\n例如把生平经历、随想、博客、日记、长期写作、重要选择、情绪记录和价值观材料整理给 AI，让它形成一份对自己的调研：\n\n- 我长期关心什么？\n- 我的表达里反复出现哪些主题？\n- 我的优势和困境是什么？\n- 我最近的拖延、焦虑或兴奋来自哪里？\n- 我适合怎样的学习和工作节奏？\n- 我过去的经历可以沉淀成什么项目？\n\nAI 可以先把散落的材料整理出来，像一面会分类的镜子。结论仍然要自己判断，尤其是涉及性格和人生选择时。\n\n### 5.4 用 AI 学习兴趣和技能\n\nAI 可以成为一个非常灵活的私人教练。\n\n例如：\n\n- 学摄影：让 AI 分析照片风格、设计练习任务、解释构图和后期思路。\n- 学化妆：让 AI 根据脸型、场景、预算和已有工具设计学习路线。\n- 学投资：让 AI 从基础概念、风险意识、资产配置和案例拆解开始教，而不是直接推荐买什么。\n- 学编程：让 AI 根据目标项目倒推所需知识。\n- 学任何新领域：让 AI 设计课程、出练习、检查理解、安排复习。\n\n这里的心法是：不要只问“这个概念是什么”，而是让 AI 变成一个能持续追踪目标、生成练习、调整难度的学习系统。\n\n### 5.5 用 AI 做旅行计划和生活计划\n\n旅行计划也是很好的 Agent 教学案例，因为它天然包含目标、约束、偏好、资料、路线和迭代。\n\n普通问法是：\n\n> 帮我做一个东京三日游攻略。\n\nAgent 式问法是：\n\n> 我想做一个东京三日游计划，预算中等，喜欢摄影、咖啡、城市散步，不喜欢太赶。请先问我 5 个必要问题，再按每天上午、下午、晚上设计路线，并说明为什么这样安排。最后给我一个可调整清单。\n\n旅行计划很适合入门，因为偏好、预算和路线随时会变。Agent 要根据这些变化反复调整，不能只生成一份漂亮攻略。\n\n### 5.6 用 AI 搭自己的小工具\n\nAgent 最有冲击力的场景之一，是让普通人意识到：\n\n> 我有一个小需求，不一定要等别人做软件，我可以让 AI 帮我搭一个够自己用的小工具。\n\n例如做一个本地照片库工具：\n\n- 从下载的照片里随机展示 9 张。\n- 用户可以快速浏览。\n- 喜欢的照片可以 star。\n- 之后可以回看收藏。\n\n这个工具不一定复杂，但意义很大。它让学习者理解，AI 可以把“我脑子里一个很小的需求”变成“电脑上一个真的能用的东西”。\n\n青少年可以用它做个人主页、小游戏、故事书、兴趣网站。成年人可以用它做数据整理、图片管理、资料归档、工作自动化。\n\n## 6. 反复练习的习惯\n\n### 6.1 从“提问者”变成“任务设计者”\n\n普通用法是问：\n\n> 帮我做一个网页。\n\nAgent 思维是描述：\n\n> 我想做一个展示我篮球爱好的个人主页。目标用户是同学和家长。页面需要有自我介绍、喜欢的球星、训练记录和照片区域。请先帮我拆需求，问我缺少的信息，再给出实现计划。\n\n多写的这些信息，会减少 AI 自己猜测的空间。\n\n### 6.2 从“要答案”变成“要过程”\n\n普通 AI 使用者容易让 AI 直接给最终答案。Agent 思维会要求 AI 暴露中间过程：\n\n- 先问我需要补充的信息。\n- 先列计划，不要直接执行。\n- 每一步完成后告诉我检查方法。\n- 如果不确定，给出假设。\n- 如果失败，解释原因并提出下一步。\n\n这会培养学习者的过程意识，也能减少盲目信任 AI。\n\n### 6.3 从“复制粘贴”变成“人机迭代”\n\nAI 的第一版通常只是草稿。接下来要做的是：\n\n1. 人提出目标。\n2. Agent 给出方案。\n3. 人指出不满意的地方。\n4. Agent 修改。\n5. 人检查结果。\n6. Agent 总结经验。\n\n用几次以后，学习者会自然形成自己的检查清单。\n\n### 6.4 从“学工具”变成“搭工作流”\n\n工具会变，但工作流更稳定。\n\n例如成年人处理 Excel 数据，可以拆成：\n\n1. 说明业务目标。\n2. 上传或描述数据。\n3. 让 AI 检查字段和异常。\n4. 让 AI 生成分析思路。\n5. 让 AI 输出图表或公式。\n6. 人检查结果是否符合业务常识。\n7. 让 AI 写成报告。\n\n同样的工作流可以迁移到学习计划、投资入门、论文阅读、代码开发、旅行规划。\n\n### 6.5 从“让 AI 替我思考”变成“让 AI 放大我的思考”\n\n这是安全边界，也是价值观。\n\nAI 可以帮我查资料、拆任务、写草稿、做计算、找错误，但最终的目标、判断、价值选择和责任仍然属于人。\n\n对青少年来说，这一点尤其重要：不能把 AI 当成作业代写器，而要把它当成学习教练、创作伙伴和练习生成器。\n\n### 6.6 从“消费软件”变成“创造自己的工具”\n\n过去很多人遇到一个需求，会先想：\n\n> 有没有现成软件？有没有教程？有没有别人做好的工具？\n\nAgent 时代可以多一个问题：\n\n> 这个需求能不能让 AI 帮我做一个够用的小工具？\n\n这不意味着每个人都要成为专业程序员，而是每个人都可以拥有更强的数字创造力。尤其对青少年来说，这种体验很关键：电脑不是只能用来消费内容，也可以用来创造自己的系统。\n\n### 6.7 从“单次使用”变成“长期协作”\n\n很多 AI 使用停留在一次性对话。Agent 思维更重视长期协作：\n\n- 把偏好写成 memory。\n- 把常用流程写成模板。\n- 把重复任务做成 skill。\n- 把项目背景沉淀成上下文包。\n- 让 AI 每次做完都总结经验。\n\n长期协作会让 AI 越来越像一个了解你的工作伙伴，而不是每次都要重新认识你的临时工具。\n\n## 7. 课程主线\n\n### 第一章：AI 不只是聊天机器人\n\n目标：建立从聊天 AI 到 Agent 的基本区别。\n\n要讲的问题：\n\n- 什么是聊天 AI？\n- 什么是 Agent？\n- 为什么工具、记忆、反馈和执行很重要？\n- 为什么 Agent 像一个“能干活的搭子”？\n- 为什么很多人已经在用 AI，任务仍然停在一句一答？\n\n练习：\n\n- 同一个任务分别用“聊天方式”和“Agent 方式”提问，比较结果差异。\n- 把一个“改文字”的局部任务，升级成一个完整工作流任务。\n\n### 第二章：把想法说清楚\n\n目标：学会把模糊想法变成 Agent 能执行的任务。\n\n任务框架：\n\n- 目标：我要完成什么？\n- 背景：为什么要做？\n- 对象：给谁用？\n- 约束：时间、工具、格式、难度、风格。\n- 成功标准：怎样算做好？\n- 检查方式：我怎么知道它做对了？\n\n练习：\n\n- 把“我想做个网页”改写成一个完整任务说明。\n- 把“我想学投资”改写成一个学习计划任务说明。\n\n### 第三章：让 AI 帮你学习\n\n目标：让 AI 成为学习教练，而不是答案机器。\n\n应用场景：\n\n- 学校科目：数学、英语、历史、科学。\n- 兴趣学习：投资入门、摄影、设计、视频剪辑、编程。\n- 课程作业：理解题意、拆解步骤、检查草稿、生成练习。\n\n重要边界：\n\n- 可以让 AI 讲解和训练。\n- 可以让 AI 帮你检查错误。\n- 不应该让 AI 直接替你完成需要自己提交的作业。\n\n练习：\n\n- 让 AI 为一个学习目标设计 7 天计划。\n- 让 AI 根据错题生成 5 道同类练习。\n- 让 AI 用三种难度解释同一个概念。\n\n### 第四章：让 AI 帮你管理生活\n\n目标：理解 Agent 可以成为个人操作系统的一部分。\n\n应用场景：\n\n- 提醒和日程。\n- todo 和项目拆解。\n- 读书笔记和长期记忆。\n- 周复盘和目标追踪。\n- 兴趣资料库。\n- 个人经历整理和自我复盘。\n\n练习：\n\n- 设计一个“我的学习/生活助理”。\n- 写一段个人偏好 memory。\n- 让 AI 根据本周任务生成每日计划。\n- 让 AI 根据一段自我介绍，提炼自己的长期主题和兴趣线索。\n\n### 第五章：让 AI 帮你创造作品\n\n目标：让青少年或初学者体验从想法到作品的完整闭环。\n\n可选项目：\n\n- 个人主页。\n- 兴趣展示网站。\n- AI 故事绘本。\n- 小游戏。\n- 学习打卡工具。\n- 家庭提醒页面。\n- 班级知识问答助手。\n- 本地照片浏览和收藏工具。\n- 旅行计划生成器。\n\n项目流程：\n\n1. 想法描述。\n2. 需求拆解。\n3. 页面或功能规划。\n4. 生成第一版。\n5. 运行和检查。\n6. 修改样式和功能。\n7. 展示作品。\n\n练习：\n\n- 做一个“关于我”的网页。\n- 做一个“我的兴趣知识库”。\n- 做一个“给低年级同学用的学习助手”。\n\n### 第六章：让 AI 帮成年人干活\n\n目标：说明 Agent 思维不只属于孩子，也能提高成年人工作效率。\n\n应用场景：\n\n- 处理 Excel：清洗数据、生成公式、做统计、写分析报告。\n- 处理文档：总结、改写、提纲、会议纪要。\n- 处理数据：读取 CSV、画图、解释趋势。\n- 软件开发：写脚本、改 bug、生成网页、搭小工具。\n- 调研和写作：收集资料、提炼观点、生成结构。\n- 把重复工作沉淀成 skill、脚本或固定工作流。\n\n练习：\n\n- 给 AI 一份表格任务，让它先问清楚目标再动手。\n- 让 AI 帮你把一个工作需求拆成可执行清单。\n- 让 AI 写一个小脚本或网页，并教你怎么验证。\n\n### 第七章：Agent 工作流\n\n目标：把零散使用升级成稳定方法。\n\n五个基础工作流：\n\n- **链式工作流**：先大纲，再内容，再润色，再检查。\n- **路由工作流**：不同问题交给不同处理方式。\n- **并行工作流**：同时生成多个方案，再比较。\n- **指挥者-执行者工作流**：一个 Agent 拆任务，多个子任务分别执行。\n- **评审-优化工作流**：一个 Agent 生成，另一个 Agent 检查。\n\n练习：\n\n- 用“评审-优化”方式改一篇作文或文章。\n- 用“并行方案”方式设计三个网页风格。\n- 用“指挥者-执行者”方式拆一个小项目。\n\n### 第八章：工具、记忆和上下文\n\n目标：理解 Agent 为什么比纯聊天更强。\n\n本章概念：\n\n- 工具：搜索、文件、浏览器、代码、表格、日历。\n- 记忆：偏好、历史、长期目标。\n- 上下文：当前任务所需的背景材料。\n- 权限：哪些事情可以让 AI 做，哪些必须人确认。\n- skill：把反复出现的任务规则沉淀成可复用能力。\n\n练习：\n\n- 为自己的学习 Agent 写一份角色说明。\n- 为自己的工作 Agent 写一份工具清单。\n- 为一个项目写上下文包：目标、资料、规则、输出格式。\n- 为一个重复任务写一份 skill 草稿。\n\n### 第九章：安全、边界和判断\n\n目标：建立负责任的 AI 使用习惯。\n\n要讲的问题：\n\n- AI 会胡说，怎么验证？\n- 什么时候不能上传隐私数据？\n- 什么时候不能让 AI 代写？\n- 如何避免过度依赖？\n- 如何让家长和老师放心？\n\n检查清单：\n\n- 重要事实要查来源。\n- 重要计算要复核。\n- 隐私信息要脱敏。\n- 作业要保留自己的思考过程。\n- 自动执行前要有人确认。\n\n### 第十章：最终项目\n\n目标：完成一个可以展示的作品或工作流。\n\n青少年项目方向：\n\n- 我的个人主页。\n- 我的 AI 学习助手。\n- 我的互动故事书。\n- 我的兴趣知识库。\n- 我的小游戏。\n\n成年人项目方向：\n\n- 我的工作自动化助手。\n- 我的 Excel 分析流程。\n- 我的学习课程生成器。\n- 我的项目管理 Agent。\n- 我的代码开发助手。\n\n最终交付：\n\n- 作品本身。\n- 任务说明。\n- Agent 对话记录摘要。\n- 遇到的问题和解决方法。\n- 下一步改进计划。\n\n## 8. 四节试讲课设计\n\n### 第 1 课：AI 不只是聊天机器人\n\n目标：让学习者理解 Agent 和普通聊天的区别。\n\n课堂任务：\n\n- 用两种方式完成同一个任务。\n- 比较“直接问答案”和“让 AI 先拆任务”的差别。\n- 写出自己的第一个 Agent 式任务说明。\n- 演示：把“改一段文字”升级成“完成一份完整材料”。\n\n课后作品：\n\n- 一份“我想让 AI 帮我完成的 3 件事”清单。\n\n### 第 2 课：把一个想法变成项目\n\n目标：学会描述目标、背景、对象、约束和成功标准。\n\n课堂任务：\n\n- 选择一个作品方向。\n- 让 AI 帮忙提问和完善需求。\n- 输出项目计划。\n\n课后作品：\n\n- 一份个人项目 brief。\n\n### 第 3 课：用 Agent 做出第一个网页或小工具\n\n目标：体验从想法到可运行作品。\n\n课堂任务：\n\n- 生成网页第一版。\n- 检查哪里不符合预期。\n- 让 AI 修改样式、文案和功能。\n\n课后作品：\n\n- 一个可展示的网页、小工具或故事作品。\n\n### 第 4 课：让 AI 成为学习和生活助理\n\n目标：把 Agent 思维迁移到长期学习和日常生活。\n\n课堂任务：\n\n- 设计一个学习助理或生活助理。\n- 写 memory 和规则。\n- 生成一周计划。\n- 讨论安全边界。\n\n课后作品：\n\n- 一份个人 AI 使用手册。\n\n## 9. 写作风格\n\n教程应该尽量避免以下风格：\n\n- 太像技术文档。\n- 太像商业课招生文案。\n- 太像工具说明书。\n- 太多术语，太少真实例子。\n\n更合适的风格：\n\n- 像一个懂 AI 的朋友在教你。\n- 先给真实场景，再解释概念。\n- 每章都有一个能动手做的小任务。\n- 每个抽象概念都配一个青少年例子和一个成年人例子。\n- 保留作者自己的使用经验，比如 Codex、提醒、memory、todo、学习、写作、开发。\n- 多写“我怎么真的用它”的案例，比如自我复盘、摄影、化妆、旅行计划、本地照片工具。\n\n## 10. 后续写作顺序\n\n建议不要从第一章开始硬写。更好的顺序是：\n\n1. 先写“反复练习的习惯”。\n2. 再写“Agent 相比聊天 AI 的进步”。\n3. 再写“为什么要教这个：作者真实场景”。\n4. 再写“青少年创造作品”。\n5. 再写“成年人干活”。\n6. 最后补齐开头、结尾和安全边界。\n\n原因很简单：工具介绍随时可以补，作者自己的使用经验才决定这门课和其他教程有什么不同。\n\n## 11. 参考资料\n\n- Hugging Face Agents Course: https://huggingface.co/learn/agents-course/unit0/introduction\n- Anthropic, Building Effective Agents: https://www.anthropic.com/engineering/building-effective-agents\n- OpenAI Agents SDK docs: https://developers.openai.com/api/docs/guides/agents\n- OpenAI tools docs: https://developers.openai.com/api/docs/guides/tools\n","instructor":"# Agent Thinking 101 讲师手册\n\n这份手册给授课者用。默认学员已经碰过 ChatGPT、Gemini、豆包或 DeepSeek，但使用方式比较零散。年龄可能差很多，所以同一个概念会准备青少年和成年人两种例子。\n\n## 课程总目标\n\n学完以后，学习者不一定要会写复杂代码，但应该能做到五件事：\n\n1. 把一个模糊想法说成清晰任务。\n2. 让 AI 先提问、先计划，而不是直接输出。\n3. 让 AI 使用工具或按流程完成一段真实工作。\n4. 检查 AI 的结果，并能提出修改意见。\n5. 把一次成功经验沉淀成模板、工作流或 skill。\n\n## 授课原则\n\n少讲概念，多做对比。\n\n不要一上来讲 Agent、MCP、RAG、工具调用这些词。先让学习者看到两个结果的差别：\n\n- “帮我做一个网页。”\n- “我想做一个摄影主页，请先问我问题、拆需求、给计划，确认后再生成第一版。”\n\n只要学习者看到第二种方式明显更像在做项目，他就会自然理解 Agent 思维。\n\n每节课都要有作品。\n\n作品可以很小：一份任务说明、一个网页、一份学习计划、一份 AI 使用手册、一份 skill 草稿。没有作品，学习者很容易觉得自己只是听了一堆道理。\n\n每节课都要有检查。\n\n每节课都要留出验收环节。可以反复问：\n\n- 这个结果能不能用？\n- 哪里不像你想要的？\n- 你怎么判断它是对的？\n- 下一步怎么改？\n\n## 课程版本\n\n### 4 节体验课\n\n适合内测、朋友试讲、小红书招募体验课。\n\n第 1 节：AI 不只是聊天机器人。  \n第 2 节：把想法说清楚。  \n第 3 节：做出第一个作品。  \n第 4 节：写出自己的 AI 使用手册。\n\n### 10 节系统课\n\n适合正式课程、社群训练营、家教或小班课。\n\n每节 90 到 120 分钟。青少年建议每节都保留 40 分钟动手时间；成年人建议每节都绑定一个真实工作场景。\n\n## 第 1 节：AI 不只是聊天机器人\n\n### 本节目标\n\n让学习者理解普通聊天 AI 和 Agent 的差别。\n\n先别急着背定义。让学员比较两种用法，自己说出差别。\n\n### 开场讲法\n\n可以这样开场：\n\n> 你可能已经用过 AI。你让它写标题、改文案、总结文章、解释概念。今天我们不学“怎么问得更好听”，而是学一个更重要的变化：怎么让 AI 从聊天框里走出来，进入你的任务现场。\n\n然后问大家：\n\n> 最近你让 AI 帮你做过什么？\n\n把答案写在白板上。通常会出现：改文案、翻译、总结、写作文、解释代码、做 PPT、查资料。\n\n接着引导：\n\n> 这些都是局部任务。今天我们试试看，能不能把它升级成完整任务。\n\n### 课堂演示\n\n选择一个简单任务，比如“做个人主页”。\n\n先输入普通 prompt：\n\n```text\n帮我做一个个人主页。\n```\n\n让学习者观察 AI 的结果。通常它会直接给页面结构或代码。\n\n再输入 Agent 式 prompt：\n\n```text\n我想做一个个人主页，用来展示我的摄影作品和最近写的文章。\n目标用户是朋友和未来可能合作的人。\n我希望页面有自我介绍、照片作品区、博客链接和联系方式。\n风格干净，有一点杂志感。\n请先帮我拆需求，问我还缺哪些信息，再给我实现计划。\n等我确认后，再开始生成第一版。\n```\n\n让学习者比较：\n\n- 第二次是不是更像一个项目？\n- AI 有没有开始问问题？\n- 结果是不是更符合个人需求？\n- 人在中间是不是更容易控制方向？\n\n### 四个概念\n\n用四个词讲 Agent：\n\n- 目标：围绕一件事持续推进。\n- 上下文：AI 要知道背景、材料、偏好和限制。\n- 工具：AI 可以读文件、查资料、写代码、处理表格。\n- 反馈：AI 需要根据结果继续修改。\n\n### 课堂练习\n\n让每个人选择一个真实任务，写两个版本：\n\n普通版：\n\n```text\n帮我……\n```\n\nAgent 版：\n\n```text\n我想完成……\n背景是……\n给谁用/给谁看……\n我已有的材料……\n限制条件……\n怎样算做好……\n请先问我问题，再给计划。\n```\n\n### 验收标准\n\n学习者本节课结束时应该能说清楚：\n\n- 普通聊天 AI 和 Agent 的区别。\n- 为什么不能只让 AI 直接给答案。\n- 自己想让 AI 帮忙完成的一件真实任务。\n\n## 第 2 节：把想法说清楚\n\n### 本节目标\n\n训练学习者写出一份清晰任务说明。\n\n很多回答之所以空泛，是因为任务本身只说了“帮我弄一下”。这一节就处理这个问题。\n\n### 开场讲法\n\n可以说：\n\n> 很多人觉得 AI 不好用，其实是因为我们给它的任务像“帮我弄一下”。人听到这句话也会不知道怎么弄。今天我们练习把“帮我弄一下”变成 AI 真能执行的任务。\n\n### 六要素\n\n任务说明包含六件事：\n\n1. 目标：我要完成什么。\n2. 背景：为什么要做。\n3. 对象：给谁用、给谁看。\n4. 材料：我已经有什么。\n5. 约束：时间、格式、工具、风格、不能做什么。\n6. 成功标准：怎样算做好。\n\n### 课堂演示\n\n拿一个模糊需求：\n\n```text\n帮我写一个课程介绍。\n```\n\n现场改成：\n\n```text\n我想写一份 Agent 思维课程介绍，用来发给朋友和潜在学员。\n读者可能已经用过 ChatGPT，但只会基础聊天。\n我希望他们读完后明白：这门课会带着人完成任务，不只是介绍 AI 工具。\n语气要真实、轻松，不要太像培训机构广告。\n长度控制在 800 字以内。\n请先帮我判断还缺哪些信息，再给我三个不同角度的大纲。\n```\n\n### 分年龄调整\n\n青少年可以用：\n\n- 做兴趣主页。\n- 做学习助手。\n- 做小游戏。\n- 做故事书。\n\n成年人可以用：\n\n- 写报告。\n- 做表格分析。\n- 规划旅行。\n- 整理资料。\n- 搭小工具。\n\n### 课堂练习\n\n每个人写一份任务说明，然后让 AI 检查：\n\n```text\n请帮我检查这份任务说明。\n哪些地方清楚？\n哪些地方还不够清楚？\n如果你要执行这个任务，还需要问我哪 5 个问题？\n```\n\n### 验收标准\n\n学习者本节课结束时应该有一份可以继续执行的项目 brief。\n\n## 第 3 节：从要答案到要过程\n\n### 本节目标\n\n让学习者学会让 AI 先计划、再执行、再检查。\n\n### 开场讲法\n\n> 以前我们很习惯问老师“答案是什么”。但和 Agent 协作时，更好的问题是“你打算怎么做”。如果你不知道 AI 的过程，就很难判断它是不是在瞎编。\n\n### 推荐流程\n\n```text\n请按这个流程帮我：\n1. 先复述你理解的目标。\n2. 再问我 3 到 5 个必要问题。\n3. 然后给出执行计划。\n4. 等我确认后，只执行第一步。\n5. 每一步结束后告诉我怎么检查。\n```\n\n### 课堂演示\n\n任务：做一个旅行计划。\n\n错误方式：\n\n```text\n帮我做一个东京三日游攻略。\n```\n\n更好的方式：\n\n```text\n我想做一个东京三日游计划。\n我喜欢摄影、咖啡、城市散步，不喜欢太赶，预算中等。\n请先复述你的理解，再问我 5 个必要问题。\n然后给我一个每天上午、下午、晚上的初步计划。\n每个安排都说明为什么适合我。\n```\n\n### 课堂练习\n\n学习者选择一个任务，要求 AI 必须先问问题和写计划。\n\n### 常见问题\n\n如果 AI 还是直接给答案怎么办？\n\n让学习者追问：\n\n```text\n你刚才直接开始做了。请停下来，先按我要求的流程：复述目标、提出问题、给计划。\n```\n\n这也是训练“指挥 AI”的一部分。\n\n### 验收标准\n\n学习者能拿到一份 AI 生成的计划，并指出计划中哪些地方需要修改。\n\n## 第 4 节：工具、上下文、记忆和 skill\n\n### 本节目标\n\n让学习者理解 Agent 为什么比纯聊天更强。\n\n这一节会出现一些术语，但要用生活例子讲。\n\n### 开场讲法\n\n> 如果 AI 只能聊天，它再聪明也像一个被关在房间里的人。Agent 的变化是：它开始有工具、有资料、有记忆，还能看到自己做出来的结果。\n\n### 四个概念\n\n工具：AI 能用的外部能力，比如搜索、文件、代码、表格、浏览器。\n\n上下文：AI 当前任务需要知道的背景，比如你的目标、文件、偏好、历史决定。\n\n记忆：长期上下文，比如你的写作风格、常做任务、长期项目。\n\nskill：把重复任务写成可复用操作手册。\n\n### 课堂演示\n\n让学习者对比两个 prompt。\n\n没有上下文：\n\n```text\n帮我写一篇博客。\n```\n\n有上下文：\n\n```text\n我想写一篇博客，主题是为什么普通人需要 Agent 思维。\n我的写作风格是：真实、口语化、不要太营销、允许有一点自我怀疑。\n读者是已经用过 AI 但用得比较浅的人。\n请先给我 3 个切入角度，不要直接写全文。\n```\n\n### 课堂练习\n\n写一份“我的 AI 使用手册”。\n\n```text\n我的常见任务：\n\n我的输出偏好：\n\n我不喜欢的风格：\n\n我希望 AI 每次先问的问题：\n\n我常用的检查标准：\n\n我想沉淀成 skill 的重复任务：\n```\n\n### 验收标准\n\n学习者有一份可复制给 AI 的个人使用手册，并能说出自己一个适合变成 skill 的任务。\n\n## 第 5 节：让 AI 帮你学习\n\n### 本节目标\n\n让学习者把 AI 从“答案机”变成“学习教练”。\n\n### 开场讲法\n\n> 学习里最危险的 AI 用法，是让它直接替你完成。最有价值的用法，是让它像一个教练一样训练你。\n\n### 课堂演示\n\n数学例子：\n\n```text\n请你像老师一样教我这道题。\n不要直接给答案。\n先问我看到题目后的第一反应。\n如果我卡住了，只给提示。\n最后总结这类题的解法，并出两道同类题。\n```\n\n兴趣学习例子：\n\n```text\n我想学摄影，现在主要用手机拍照。\n我喜欢城市街景和咖啡馆，不喜欢摆拍。\n请帮我设计一个 4 周练习计划。\n每周给我 3 个拍摄任务，每个任务说明练什么、怎么拍、怎么检查照片。\n```\n\n### 课堂练习\n\n每个人选择一个想学的东西，让 AI 生成 7 天入门计划。\n\n要求：\n\n- 每天不超过 30 分钟。\n- 每天有小任务。\n- 每天有检查方法。\n- 第 7 天有一个小作品或小总结。\n\n### 验收标准\n\n学习者能得到一份符合自己情况的学习计划，并能说出它哪里需要调整。\n\n## 第 6 节：让 AI 帮你创造作品\n\n### 本节目标\n\n让学习者做出一个可展示的小作品。\n\n这是课程里最能产生“哇，原来我也可以”的一节。\n\n### 开场讲法\n\n> 今天不讲太多概念。今天的目标只有一个：做出一个属于你的东西。它可以很小，但必须真的能打开、能展示、能解释为什么是你做的。\n\n### 推荐项目\n\n青少年：\n\n- 兴趣主页。\n- 小游戏。\n- 故事书。\n- 学习助手。\n\n成年人：\n\n- 个人主页。\n- 旅行计划页面。\n- 照片浏览工具。\n- 工作流模板。\n\n### 标准流程\n\n1. 写项目 brief。\n2. 让 AI 问问题。\n3. 让 AI 生成第一版。\n4. 打开或运行。\n5. 找出 3 个不满意的地方。\n6. 让 AI 修改。\n7. 加入自己的真实内容。\n8. 展示。\n\n### 课堂提醒\n\n不要追求完美。第一版很丑也没关系。课程要训练的是迭代，不是一次成功。\n\n### 验收标准\n\n学习者完成一个可展示的作品，并写出：\n\n- 我做了什么。\n- 我怎么描述需求。\n- AI 第一版哪里不好。\n- 我怎么让它修改。\n- 下一步想改什么。\n\n## 第 7 节：让 AI 帮成年人干活\n\n### 本节目标\n\n让成年人把 AI 从“局部助手”升级成“工作流助手”。\n\n如果班里主要是青少年，这节可以简化；如果主要是成年人，这节要重点讲。\n\n### 开场讲法\n\n> 很多成年人已经装了不少 AI 工具，却仍然每次从头做同一件事。这节课练习把重复步骤留下来，下次少做一遍。\n\n### 场景一：Excel\n\n教学流程：\n\n1. 说明业务目标。\n2. 让 AI 检查字段。\n3. 让 AI 找异常值。\n4. 让 AI 给分析维度。\n5. 人确认维度。\n6. AI 写公式或分析。\n7. 人检查。\n8. AI 写报告。\n\n### 场景二：文档\n\n文档工作流：\n\n1. 收集材料。\n2. 提炼结构。\n3. 找缺口。\n4. 写初稿。\n5. 改风格。\n6. 自查空话。\n\n### 场景三：小工具\n\n可以演示“照片浏览工具”或“批量文件整理脚本”。\n\n### 验收标准\n\n学习者能列出自己一个重复工作，并写出输入、输出、步骤、检查标准。\n\n## 第 8 节：Agent 工作流\n\n### 本节目标\n\n把零散技巧升级成稳定模式。\n\n### 五种工作流\n\n提示链：一步一步写，适合文档和课程。\n\n路由：先分类再处理，适合反馈、邮件、任务分拣。\n\n并行：同时生成多个方案，适合创意和设计。\n\n指挥者-执行者：先拆任务再分别完成，适合复杂项目。\n\n评审-优化：先生成再挑错再修改，适合几乎所有严肃输出。\n\n### 课堂演示\n\n用“评审-优化”改一段文字：\n\n```text\n请先作为作者写第一版。\n写完后，切换成挑剔但友好的审稿人，检查空话、逻辑跳跃、AI 腔和读者看不懂的地方。\n最后根据审稿意见给第二版。\n```\n\n### 课堂练习\n\n每个人选一个自己之前生成的内容，用评审-优化工作流改一遍。\n\n### 验收标准\n\n学习者能说出自己用了哪种工作流，以及为什么。\n\n## 第 9 节：安全、边界和判断\n\n### 本节目标\n\n建立负责任使用 AI 的习惯。\n\n### 开场讲法\n\n> AI 很强，但它不是负责人。负责人永远是人。你可以让 AI 做很多事，但你要知道哪些事必须检查，哪些事不能交给它。\n\n### 必讲边界\n\n- 隐私不能随便上传。\n- 重要事实要查来源。\n- 重要计算要复核。\n- 涉及钱、健康、法律要特别谨慎。\n- 作业可以让 AI 教，但不应该直接代写。\n- 自动执行前要确认。\n\n### 课堂练习\n\n写一份个人 AI 使用边界：\n\n```text\n我可以让 AI 做：\n\n我不让 AI 做：\n\n涉及隐私时：\n\n涉及钱、健康、法律时：\n\n重要结论的检查方式：\n```\n\n### 验收标准\n\n学习者能说出至少 3 个不能盲目信任 AI 的场景。\n\n## 第 10 节：最终项目展示\n\n### 本节目标\n\n让学习者完成展示、复盘和下一步计划。\n\n### 展示结构\n\n每个人用 3 到 5 分钟展示：\n\n1. 我做了什么。\n2. 为什么想做。\n3. 我怎么和 AI 说需求。\n4. AI 第一版哪里不好。\n5. 我怎么修改。\n6. 最终结果是什么。\n7. 下一步想改什么。\n\n### 讲师点评\n\n点评时不要只夸结果。重点点评：\n\n- 任务说明是否清楚。\n- 是否有迭代。\n- 是否会检查。\n- 是否有自己的内容。\n- 是否可以沉淀成工作流。\n\n### 课程收尾\n\n可以用这段话结束：\n\n> 课程结束以后，工具还会继续更新。希望你留下的是一套做事习惯：任务先说清楚，计划先看一遍，结果自己检查，做顺的流程留到下次继续用。\n\n## 附录：讲师检查清单\n\n每次上课前检查：\n\n- 今天有没有明确作品。\n- 有没有普通 prompt 和 Agent prompt 的对比。\n- 有没有至少 30 分钟动手时间。\n- 有没有结果检查环节。\n- 有没有让学习者写下自己的下一步。\n\n每次上课后记录：\n\n- 哪个例子最打动学习者。\n- 哪个概念最难懂。\n- 哪个 prompt 最有效。\n- 哪个练习时间不够。\n- 哪个学员作品可以作为案例。\n","workbook":"# Agent Thinking 101 学习者练习册\n\n这份练习册留给课堂动手和课后复盘。每节课至少写一次自己的输入，也要记录 AI 第一版哪里不对。空着没关系，拿模板照抄就没什么用了。\n\n## 使用方式\n\n每节课做三件事：\n\n1. 写一份自己的输入。\n2. 让 AI 给出结果。\n3. 写下你怎么检查和修改。\n\n不知道做什么时，就从最近的一件小麻烦开始。个人主页、旅行计划、表格或照片工具都行，前提是你确实想用它。\n\n## 第 1 节练习：从聊天到 Agent\n\n### 练习目标\n\n感受“问 AI”和“让 AI 做事”的区别。\n\n### 我的任务\n\n我想让 AI 帮我做的事：\n\n```text\n\n```\n\n### 普通聊天版\n\n```text\n帮我……\n```\n\nAI 给出的结果：\n\n```text\n\n```\n\n### Agent 版本\n\n```text\n我想完成：\n\n背景是：\n\n给谁用/给谁看：\n\n我已有的材料：\n\n限制条件：\n\n怎样算做好：\n\n请先问我问题，再给我计划。\n```\n\nAI 给出的结果：\n\n```text\n\n```\n\n### 我的观察\n\n两次结果有什么不同？\n\n```text\n\n```\n\n哪一个更像在完成真实任务？为什么？\n\n```text\n\n```\n\n## 第 2 节练习：写项目 brief\n\n### 练习目标\n\n把模糊想法变成清晰任务。\n\n### 项目 brief\n\n项目名称：\n\n```text\n\n```\n\n我为什么想做它：\n\n```text\n\n```\n\n这个项目给谁用：\n\n```text\n\n```\n\n我希望它完成什么：\n\n```text\n\n```\n\n我已有的材料：\n\n```text\n\n```\n\n限制条件：\n\n```text\n\n```\n\n怎样算做好：\n\n```text\n\n```\n\n### 让 AI 检查\n\n复制下面的话给 AI：\n\n```text\n请帮我检查这份项目 brief。\n哪些地方清楚？\n哪些地方还不够清楚？\n如果你要执行这个任务，还需要问我哪 5 个问题？\n```\n\nAI 问我的问题：\n\n```text\n\n```\n\n我补充后的版本：\n\n```text\n\n```\n\n## 第 3 节练习：先计划，再执行\n\n### 练习目标\n\n训练 AI 先理解目标、提问、计划，再开始执行。\n\n### 我的任务\n\n```text\n\n```\n\n### 给 AI 的流程要求\n\n```text\n请按这个流程帮我：\n1. 先复述你理解的目标。\n2. 再问我 3 到 5 个必要问题。\n3. 然后给出执行计划。\n4. 等我确认后，只执行第一步。\n5. 每一步结束后告诉我怎么检查结果。\n```\n\n### AI 复述的目标\n\n```text\n\n```\n\n### AI 问的问题\n\n```text\n\n```\n\n### AI 给出的计划\n\n```text\n\n```\n\n### 我对计划的修改意见\n\n```text\n\n```\n\n## 第 4 节练习：我的 AI 使用手册\n\n### 练习目标\n\n沉淀自己的偏好、上下文和可复用工作方式。\n\n### 我的常见任务\n\n```text\n\n```\n\n### 我喜欢的输出风格\n\n```text\n\n```\n\n### 我不喜欢的输出风格\n\n```text\n\n```\n\n### 我希望 AI 每次先问的问题\n\n```text\n\n```\n\n### 我常用的检查标准\n\n```text\n\n```\n\n### 我希望沉淀成 skill 的重复任务\n\n```text\n\n```\n\n### 可复制给 AI 的版本\n\n```text\n这是我的 AI 使用手册：\n\n我的常见任务是：\n\n我喜欢的输出风格是：\n\n我不喜欢的输出风格是：\n\n我希望你每次先问：\n\n我的检查标准是：\n\n我想沉淀成 skill 的任务是：\n```\n\n## 第 5 节练习：让 AI 帮我学习\n\n### 练习目标\n\n把 AI 当成学习教练，而不是答案机。\n\n### 我想学的东西\n\n```text\n\n```\n\n### 我的基础\n\n```text\n\n```\n\n### 我每天/每周能投入的时间\n\n```text\n\n```\n\n### 我希望第 7 天完成的小作品或小总结\n\n```text\n\n```\n\n### 给 AI 的 prompt\n\n```text\n我想在 7 天内入门：\n\n我的基础是：\n\n我每天最多能花：\n\n我希望第 7 天能完成一个小作品或小总结。\n\n请帮我设计 7 天计划。\n每天包括：\n1. 今天学什么。\n2. 一个 30 分钟以内的小任务。\n3. 怎么检查我有没有学会。\n4. 如果太难，可以怎么降低难度。\n```\n\n### AI 给我的计划\n\n```text\n\n```\n\n### 我觉得需要调整的地方\n\n```text\n\n```\n\n## 第 6 节练习：做出第一个作品\n\n### 练习目标\n\n完成一个可以展示的小作品。\n\n### 我选择的作品\n\n- 个人主页\n- 兴趣展示网站\n- 本地照片浏览工具\n- 学习打卡工具\n- 旅行计划页面\n- 小游戏\n- AI 故事书\n- 其他：\n\n### 我的项目 brief\n\n```text\n\n```\n\n### AI 第一版结果\n\n```text\n\n```\n\n### 我打开/运行后看到的问题\n\n1.\n2.\n3.\n\n### 我让 AI 修改的 prompt\n\n```text\n\n```\n\n### 第二版结果\n\n```text\n\n```\n\n### 我会怎么展示这个作品\n\n```text\n\n```\n\n## 第 7 节练习：把重复工作变成工作流\n\n### 练习目标\n\n找到一个值得自动化或沉淀成 skill 的任务。\n\n### 我重复做的 5 件事\n\n1.\n2.\n3.\n4.\n5.\n\n### 我选择沉淀的一件事\n\n```text\n\n```\n\n### 输入是什么\n\n```text\n\n```\n\n### 输出是什么\n\n```text\n\n```\n\n### 标准步骤\n\n1.\n2.\n3.\n4.\n5.\n\n### 哪些步骤可以 AI 做\n\n```text\n\n```\n\n### 哪些步骤必须人确认\n\n```text\n\n```\n\n### Skill 草稿\n\n```text\n技能名称：\n\n用途：\n\n输入：\n\n输出：\n\n工作流程：\n\n检查标准：\n\n必须人确认的地方：\n```\n\n## 第 8 节练习：使用一种 Agent 工作流\n\n### 练习目标\n\n学会在真实任务里选择工作流。\n\n### 我选择的工作流\n\n- 提示链\n- 路由\n- 并行\n- 指挥者-执行者\n- 评审-优化\n\n### 为什么选择它\n\n```text\n\n```\n\n### 给 AI 的 prompt\n\n```text\n\n```\n\n### AI 的结果\n\n```text\n\n```\n\n### 我怎么检查和修改\n\n```text\n\n```\n\n## 第 9 节练习：我的 AI 使用边界\n\n### 练习目标\n\n明确哪些事可以让 AI 做，哪些事必须小心。\n\n### 我可以让 AI 帮我做\n\n```text\n\n```\n\n### 我暂时不让 AI 做\n\n```text\n\n```\n\n### 涉及隐私时，我会\n\n```text\n\n```\n\n### 涉及钱、健康、法律时，我会\n\n```text\n\n```\n\n### AI 输出重要结论时，我会这样检查\n\n```text\n\n```\n\n## 第 10 节练习：最终项目提交\n\n### 项目名称\n\n```text\n\n```\n\n### 我为什么想做它\n\n```text\n\n```\n\n### 这个项目给谁用\n\n```text\n\n```\n\n### 我使用的 AI 工具\n\n```text\n\n```\n\n### 我给 AI 的第一版任务说明\n\n```text\n\n```\n\n### AI 第一版结果\n\n```text\n\n```\n\n### 我发现的问题\n\n```text\n\n```\n\n### 我让 AI 怎么修改\n\n```text\n\n```\n\n### 最终结果\n\n```text\n\n```\n\n### 我怎么检查它\n\n```text\n\n```\n\n### 我学到了什么\n\n```text\n\n```\n\n### 下一步想改进\n\n```text\n\n```\n\n## 最终复盘\n\n学完这门课后，请回答三个问题：\n\n1. 我以前怎么用 AI？\n\n```text\n\n```\n\n2. 我现在对 Agent 思维的理解是什么？\n\n```text\n\n```\n\n3. 我接下来最想沉淀成工作流的一件事是什么？\n\n```text\n\n```\n","prompts":"# Agent Thinking 101 Prompt 与 Skill 模板库\n\n这些模板可以直接复制，但别把它们当咒语。先填进自己的目标、材料和限制。用过几次后，删掉多余的问题，留下每次都会用到的部分。\n\n## 1. 通用任务说明模板\n\n适合几乎所有任务。\n\n```text\n我想完成：\n\n背景是：\n\n这个结果给谁用/给谁看：\n\n我已有的材料：\n\n限制条件：\n\n我希望最后输出：\n\n怎样算做好：\n\n请你先检查我的描述是否清楚。如果不清楚，先问我问题，不要急着开始做。\n```\n\n## 2. Agent 式协作流程模板\n\n适合写代码、写文档、做数据、做项目。\n\n```text\n请按这个流程帮我：\n\n1. 先复述你理解的目标。\n2. 再问我 3 到 5 个必要问题。\n3. 然后给出执行计划。\n4. 等我确认后，只执行第一步。\n5. 每一步结束后告诉我怎么检查结果。\n6. 如果遇到不确定的地方，请明确说出你的假设。\n7. 完成后总结这次任务可以沉淀成什么经验。\n```\n\n## 3. 让 AI 先问问题\n\n适合需求还不清楚的时候。\n\n```text\n我现在只有一个模糊想法：\n\n……\n\n请不要直接给方案。\n请先像一个有经验的项目顾问一样，问我 8 个关键问题。\n这些问题要帮助我澄清目标、用户、材料、限制、风格、成功标准和风险。\n问完后，等我回答，再帮我整理成任务说明。\n```\n\n## 4. 把想法变成项目 brief\n\n适合青少年作品、个人项目、小工具、课程项目。\n\n```text\n请帮我把下面这个想法整理成项目 brief：\n\n想法：\n\n……\n\n请输出：\n1. 项目名称。\n2. 这个项目解决什么问题。\n3. 给谁使用。\n4. 核心功能。\n5. 第一版最小可行范围。\n6. 需要我补充的材料。\n7. 可能遇到的困难。\n8. 第一版验收标准。\n```\n\n## 5. 做个人主页\n\n适合青少年、成年人、创作者、求职者。\n\n```text\n我想做一个个人主页。\n\n它不是简历，而是展示我这个人。\n\n我的身份/兴趣：\n\n我想展示的内容：\n\n目标读者：\n\n我喜欢的风格：\n\n我不喜欢的风格：\n\n请先帮我设计页面结构，再问我还缺哪些内容。\n等我确认后，再生成第一版 HTML/CSS。\n生成后请告诉我怎么在本地打开，以及如何检查页面有没有问题。\n```\n\n## 6. 做兴趣展示网站\n\n适合孩子的作品课。\n\n```text\n我想做一个关于【兴趣】的网站。\n\n这个网站主要给【同学/家长/朋友】看。\n\n我希望包含：\n- 我为什么喜欢它。\n- 我最喜欢的作品/人物/案例。\n- 我自己的经历或练习记录。\n- 我想继续学习的方向。\n\n我的技术基础是：\n\n页面风格希望：\n\n请先帮我拆成 3 到 5 个页面模块，然后问我还需要补充什么。\n```\n\n## 7. 做学习助手\n\n适合学校科目、兴趣学习、成年人自学。\n\n```text\n我想做一个学习助手，用来帮我学习：\n\n我的基础：\n\n我每周能投入的时间：\n\n我容易卡住的地方：\n\n我希望它帮我：\n- 制定计划。\n- 出练习。\n- 检查我的回答。\n- 根据错误调整难度。\n- 做阶段复盘。\n\n请先帮我设计这个学习助手的工作方式。\n不要直接开始讲课。\n```\n\n## 8. 让 AI 像老师一样讲题\n\n适合学生，不适合直接代写。\n\n```text\n请你像老师一样教我这道题。\n\n要求：\n1. 不要直接给最终答案。\n2. 先问我看到题目后的想法。\n3. 如果我答错，先指出错在哪里。\n4. 如果我卡住，只给一个小提示。\n5. 最后总结这类题的解法。\n6. 再出 2 道同类题让我练习。\n\n题目是：\n\n……\n```\n\n## 9. 设计 7 天学习计划\n\n适合兴趣学习、技能入门。\n\n```text\n我想在 7 天内入门：\n\n我的基础是：\n\n我每天最多能花：\n\n我希望第 7 天能完成一个小作品或小总结。\n\n请帮我设计 7 天计划。\n每天包括：\n1. 今天学什么。\n2. 一个 30 分钟以内的小任务。\n3. 怎么检查我有没有学会。\n4. 如果太难，可以怎么降低难度。\n```\n\n## 10. 学投资的安全模板\n\n只用于知识学习，不用于具体投资建议。\n\n```text\n我想学习投资入门。\n\n请注意：\n1. 不要推荐具体股票、基金或买卖时点。\n2. 不要替我做投资决策。\n3. 请把重点放在基础知识、风险意识、资产类别、长期收益、分散配置和常见误区。\n4. 每讲一个概念，都给一个生活化例子。\n5. 每节最后给我 3 个问题，检查我是否理解。\n\n请先问我当前基础和学习目标，再设计入门路线。\n```\n\n## 11. 处理 Excel 或 CSV\n\n适合成年人工作流。\n\n```text\n我需要分析一份表格。\n\n业务目标是：\n\n表格字段大概包括：\n\n我希望得到：\n\n请不要直接下结论。\n请先帮我：\n1. 检查字段含义。\n2. 判断可能的缺失值和异常值。\n3. 提出 3 到 5 个分析维度。\n4. 告诉我每个维度为什么有意义。\n5. 等我确认后，再开始计算或写公式。\n\n最后请输出一份可以给同事看的摘要，并说明哪些结论需要人工复核。\n```\n\n## 12. 写工作报告\n\n适合周报、项目汇报、调研报告。\n\n```text\n我需要写一份报告。\n\n报告类型：\n\n读者：\n\n目标：\n\n已有材料：\n\n希望语气：\n\n请按流程来：\n1. 先提炼材料里的关键信息。\n2. 再指出缺少哪些信息。\n3. 给出报告结构。\n4. 等我确认后再写初稿。\n5. 初稿完成后，检查空话、重复、逻辑跳跃和读者看不懂的地方。\n```\n\n## 13. 用 Codex 改项目\n\n适合 AI Coding Agent。\n\n```text\n请先阅读当前项目结构。\n\n我的目标是：\n\n请先不要直接修改文件。\n\n请先告诉我：\n1. 这个项目大概是什么技术栈。\n2. 与目标最相关的文件有哪些。\n3. 你建议怎么改。\n4. 每一步怎么验证。\n5. 可能的风险是什么。\n\n等我确认后，再开始实施。\n```\n\n## 14. 让 AI 修 bug\n\n适合代码报错、网页问题、小工具问题。\n\n```text\n我遇到了一个问题：\n\n现象：\n\n我期望的结果：\n\n实际结果：\n\n相关报错：\n\n我已经尝试过：\n\n请不要直接猜原因。\n请先根据现象列出 3 个可能原因，并告诉我如何验证每个原因。\n然后从最可能、成本最低的验证开始。\n```\n\n## 15. 做本地照片浏览工具\n\n适合展示“AI 帮我做自己的小工具”。\n\n```text\n我想做一个本地照片浏览工具。\n\n目标：\n- 从指定照片文件夹里随机展示 9 张图片。\n- 可以刷新下一组。\n- 可以给喜欢的照片 star。\n- 可以查看收藏列表。\n\n我的运行环境：\n\n照片文件夹路径：\n\n我希望第一版尽量简单可用，不追求复杂功能。\n\n请先问我必要问题，再给出最小实现方案。\n如果需要写代码，请告诉我怎么运行、怎么检查、可能会遇到什么权限问题。\n```\n\n## 16. 做旅行计划\n\n适合普通人快速理解 Agent 思维。\n\n```text\n我想做一个旅行计划。\n\n目的地：\n\n天数：\n\n同行人：\n\n预算：\n\n喜欢：\n\n不喜欢：\n\n节奏偏好：\n\n必须去/必须避开的地方：\n\n请先问我还缺哪些信息。\n然后按每天上午、下午、晚上设计路线。\n每个安排都说明为什么适合我。\n最后给出一个可以调整的清单，而不是一份死板攻略。\n```\n\n## 17. 个人复盘和自我理解\n\n适合整理博客、日记、随想、人生经历。\n\n```text\n我会给你一些关于我的材料，包括经历、随想、博客或日记片段。\n\n请你不要急着评价我。\n\n请帮我做一份温和、诚实的自我观察：\n1. 我反复关心的主题。\n2. 我的优势。\n3. 我容易卡住的地方。\n4. 我最近可能在逃避或拖延什么。\n5. 我可以继续发展成项目的线索。\n6. 你不确定但值得我思考的问题。\n\n请把结论和证据分开写。\n不要把猜测写得太确定。\n```\n\n## 18. 评审-优化\n\n适合文章、报告、课程、网页、prompt。\n\n```text\n请先作为作者/执行者给出第一版。\n\n完成后，请切换成挑剔但友好的评审，检查：\n1. 有没有空话。\n2. 有没有逻辑跳跃。\n3. 有没有太像 AI 的句子。\n4. 有没有读者看不懂的术语。\n5. 有没有可以删掉的段落。\n6. 有没有缺少例子。\n7. 有没有事实需要验证。\n\n请先列出评审意见。\n等我确认哪些意见要采纳后，再改第二版。\n```\n\n## 19. 把重复任务写成 skill 草稿\n\n适合沉淀个人工作流。\n\n```text\n我想把一个重复任务写成 skill 草稿。\n\n任务名称：\n\n我为什么经常做它：\n\n输入通常是什么：\n\n输出应该是什么：\n\n标准步骤：\n\n判断标准：\n\n容易出错的地方：\n\n哪些步骤可以 AI 做：\n\n哪些步骤必须人确认：\n\n请帮我整理成一份给 AI 使用的操作手册。\n要求清晰、可复用、不要写成泛泛建议。\n```\n\n## 20. 让 AI 总结经验\n\n适合每次任务结束后沉淀。\n\n```text\n请总结这次协作。\n\n请包括：\n1. 我一开始的目标是什么。\n2. 我们实际完成了什么。\n3. 中间遇到什么问题。\n4. 哪些 prompt 或流程有效。\n5. 下次可以复用什么。\n6. 如果要写成 skill，应该包含哪些规则。\n7. 我作为使用者哪里可以说得更清楚。\n```\n\n## 21. Prompt 使用原则\n\n模板只是一个起点。检查下面几项有没有说清楚：\n\n- 目标。\n- 背景。\n- 材料。\n- 约束。\n- 成功标准。\n- 检查方式。\n\nprompt 写得长不代表任务清楚。反过来，背景已经明确时，几句话也够用。\n\n## 22. Skill 草稿示例：旅行计划助手\n\n```text\n技能名称：旅行计划助手\n\n用途：\n帮助用户根据目的地、预算、兴趣、同行人和节奏偏好，制定可调整的旅行计划。\n\n工作流程：\n1. 先询问目的地、时间、同行人、预算、兴趣和禁忌。\n2. 不要直接生成攻略。\n3. 先总结用户偏好。\n4. 给出 2 到 3 种旅行节奏方案。\n5. 用户选择后，再按天安排上午、下午、晚上。\n6. 每个安排说明原因。\n7. 最后输出可调整清单。\n\n检查标准：\n- 路线不要太赶。\n- 安排要符合用户兴趣。\n- 不确定的营业时间、票价和交通信息要提示用户查证。\n- 不替用户做涉及付款的操作。\n```\n\n## 23. Skill 草稿示例：个人写作编辑\n\n```text\n技能名称：个人写作编辑\n\n用途：\n帮助用户把口语化想法整理成博客、课程文案或长文，但保留真实感。\n\n风格规则：\n- 不要太营销。\n- 不要堆概念。\n- 少用口号。\n- 保留一点个人观察和犹豫。\n- 句子可以短一点。\n- 先讲真实场景，再讲抽象概念。\n\n工作流程：\n1. 先提炼原始材料里的核心观点。\n2. 问用户目标读者是谁。\n3. 给 2 到 3 个切入角度。\n4. 等用户选方向后再写初稿。\n5. 写完后检查 AI 腔、空话、重复和逻辑跳跃。\n```\n\n## 24. Skill 草稿示例：学习教练\n\n```text\n技能名称：学习教练\n\n用途：\n帮助用户学习一个新领域，但不直接替用户完成应该自己完成的作业。\n\n工作流程：\n1. 先询问学习目标、当前基础、可投入时间和截止时间。\n2. 把目标拆成阶段。\n3. 每个阶段给小任务和检查方法。\n4. 用户回答后再反馈。\n5. 如果用户卡住，先给提示，不直接给最终答案。\n6. 每周做一次复盘。\n\n边界：\n- 不代写作业。\n- 不替用户做高风险决策。\n- 涉及投资、医学、法律时，只做知识解释，并提醒查专业来源。\n```\n","abstract":"# 和 AI Agent 一起做事\n\n## 一门教人把 AI 用到具体事情里的课\n\n我身边不少朋友已经在用 ChatGPT、Gemini、豆包或 DeepSeek。平时让它改改文字、查点资料，偶尔也拿来问代码。可一到稍微完整一点的任务，他们还是会把工作切成很多小段，一句一句地喂给 AI。\n\n我教他们用 Codex 时，最明显的变化不在模型，而在用法。AI 可以先读项目、列计划，再改文件、跑命令、看报错。处理表格、整理资料、做旅行计划也是类似的。你可以把整件事交代清楚，让它连续做一段，而不是每次只问一句。\n\n这门课想把这种用法讲明白。\n\n## 谁可以来学\n\n年龄不是主要门槛。\n\n青少年可以做自己的网页、小游戏、故事书和学习助手。成年人更可能拿它处理 Excel、写报告、整理资料，或者搭一个只有自己会用的小工具。家长和老师则需要弄清楚另一件事：孩子用 AI，重点不该是抄答案，而是学会描述想法、看懂结果，并且愿意把第一版改掉重来。\n\n不要求会编程。会用电脑、手上有一件想做的事，就够开始了。\n\n## 课里会做什么\n\n我们会练习怎样把一个含糊的念头说清楚，怎样让 AI 先问问题、列计划，再开始执行。还会接触文件、表格、代码和浏览器这些工具，但不会一上来堆术语。\n\n课里的项目会尽量贴近生活：个人主页、照片浏览器、旅行计划、学习助手、Excel 分析流程，都可以。选什么项目不重要，重要的是你真的需要它，也愿意检查 AI 做出来的东西。\n\n我们还会讨论几个不太舒服但绕不开的问题：AI 会胡说怎么办？哪些资料不能上传？什么时候应该让它停下来？作业和工作成果的责任算谁的？\n\n## 一个简单例子\n\n很多人会这样问：\n\n```text\n帮我做一个网页。\n```\n\n如果这是你自己的项目，可以多交代几句：\n\n```text\n我想做一个个人主页，放摄影作品和最近写的文章。\n主要给朋友和可能合作的人看。\n页面需要自我介绍、作品区、博客链接和联系方式。\n我喜欢干净一点的排版，不想做得像公司官网。\n\n先别急着写代码。请检查我还漏了什么，问完问题后再列一个实现计划。\n```\n\n第二种写法没有什么玄学。你只是把真实情况告诉了 AI，也给自己留了一个确认计划的机会。\n\n## 十章内容\n\n1. AI 不只是聊天机器人\n2. 把想法说清楚\n3. 先问问题，再计划和执行\n4. 工具、上下文、记忆和 skill\n5. 用 AI 学习学校科目和兴趣技能\n6. 用 AI 做网页、小工具和其他作品\n7. 用 AI 处理表格、文档和重复工作\n8. 几种常见的 Agent 工作流\n9. 安全、隐私和人的责任\n10. 完成并展示一个自己的项目\n\n这门课最后希望留下的，不是某个软件的操作步骤。软件更新太快，半年后菜单可能就变了。更耐用的是一套做事习惯：任务先说清楚，计划先看一遍，结果自己验收，做顺的流程再留下来下次用。\n","marketing":"# Agent Thinking 101 对外传播包\n\n这些文字用于朋友圈、小红书和体验课招募。语气可以吸引人，但别把它写成“抓住 AI 风口”的培训广告。读者需要先认出自己的问题，然后才会想继续看。\n\n## 一句话介绍\n\n教你把 AI 用到一件完整的事情里，而不只是和它聊几句。\n\n## 30 字版本\n\n会用 AI 改文字，还不等于会让 AI 做事。这门课从真实任务开始，练习计划、执行和检查。\n\n## 100 字版本\n\n很多人已经在用 ChatGPT、Gemini、豆包或 DeepSeek，但用法还停在改文字、写标题和查资料。我想讲的是下一步：怎样把一件完整的事情交代清楚，让 AI 先问问题、列计划，再读文件、处理表格、写代码或搭小工具。没有玄学 prompt，也不要求先会编程。带一个真实需求来，和 AI 一起把它做出来。\n\n## 300 字版本\n\n我教朋友用 Codex 时发现，很多人并不缺 AI 工具。他们缺的是另一种用法。\n\n他们已经会让 ChatGPT 改一段文字，也会让 Gemini 查资料。但面对一个完整任务，还是习惯自己把工作切碎，一句一句地问。其实现在的 Agent 已经能先读材料、问清需求、列计划，再连续处理文件、表格和代码。第一版不对，它还能根据反馈继续改。\n\n我想把这套做事方法整理成一门课。\n\n青少年可以拿它做个人主页、小游戏或学习助手。成年人可以整理 Excel、写报告、规划旅行，或者做一个只有自己需要的小工具。我们不会把时间花在背 prompt 上，也不会鼓励用 AI 代写作业。课上更关心几个具体问题：需求说清楚了吗？AI 的计划靠谱吗？结果怎么检查？这次做顺了，下次能不能少做一遍？\n\n每个人最后都要带走一个作品，或者一套自己会继续使用的工作流。\n\n## 小红书标题备选\n\n1. 你会用 AI，但可能还没让它完整做过一件事\n2. 别再一句一句问 AI 了，先把任务说完整\n3. 我教朋友用 Codex 时，发现大家卡在同一个地方\n4. 普通人怎样把重复工作交给 AI\n5. 给孩子上的 AI 课，不该从背 prompt 开始\n6. 成年人也该补一节 AI 使用课\n7. 我想做一门不教“提示词秘籍”的 AI 课\n8. 用 AI 做一个自己真的需要的小工具\n9. AI 可以帮你做事，但结果还是得你来验收\n10. 我为什么把少儿编程课改成了 Agent 思维课\n\n## 小红书开头\n\n### 版本 A：从朋友说起\n\n我教朋友用 Codex 时，发现大家卡住的地方很像。\n\n他们早就在用 ChatGPT 或 Gemini，也会让 AI 改文字、查资料、解释代码。但他们没想过，可以把一个完整任务交给 Agent：先读项目，列出要改的地方，等人确认后再动手，最后自己跑一遍检查。\n\n模型当然有差别，不过更大的差别在使用习惯。\n\n### 版本 B：从一个小工具说起\n\n我以前想要一个很小的照片工具：每次从本地随机拿出 9 张图，让我挑喜欢的照片加星。\n\n这种需求太小，不值得专门找软件；让我自己从头写，我大概也会一直拖着。后来我把想法交给 AI，一边试一边改，很快就做出了能用的版本。\n\n我开始觉得，普通人更值得练习的，是怎样把脑子里的小需求做出来。至于用哪个 AI 产品，反倒可以后选。\n\n### 版本 C：从孩子说起\n\n如果让我给孩子上一节 AI 课，我不想先教他背 prompt，也不想让他拿 AI 抄作业。\n\n我更想问他：你最近想做什么？是篮球主页、小游戏，还是一个能帮你背单词的小工具？然后陪他把想法讲清楚，看 AI 做出的第一版哪里不对，再一点点改成自己的作品。\n\n## 体验课招募文案\n\n我准备找几个人试讲《Agent Thinking 101：和 AI Agent 一起做事》。\n\n课上不讲“万能提示词”。我们会选一个真实任务，练习怎样把需求说清楚，让 AI 先问问题和列计划，再开始执行。任务可以是网页、小工具、学习计划，也可以是一份表格或工作报告。\n\n适合两类人：\n\n- 想用 AI 做自己作品的青少年\n- 已经用过 AI，但工作方式仍然比较零散的成年人\n\n每个人最后要做出一个能打开、能使用或能继续修改的结果。内测阶段我更想知道哪些地方难懂、哪些例子有用，所以人数不会太多。\n\n## 朋友圈版本\n\n最近在整理一门叫《Agent Thinking 101》的课。\n\n一开始我想做少儿编程，后来发现成年人也有同样的问题。我们已经会让 AI 改文字、总结文章，却很少把一件完整的事情交给它处理。\n\n我想讲的是怎样把需求说清楚，让 AI 先问问题、列计划，再去读文件、处理表格、写代码和检查结果。孩子可以做网页或小游戏，成年人可以整理工作流程，也可以搭一个自己用的小工具。\n\n之后我会找几个人做一轮内测。要是你已经用过 AI，但总觉得它只是在聊天框里打转，可以来一起试试。\n\n## 海报文字\n\n主标题：\n\n和 AI Agent 一起做事\n\n副标题：\n\n带一个真实需求来，和 AI 一起把它做出来\n\n课程内容：\n\n- 把含糊的想法整理成任务\n- 先看计划，再让 AI 执行\n- 检查结果，留下可复用的流程\n\n适合青少年、成年人、家长老师，以及想学 Codex 和 Agent 工作流的人。\n\n## 课程页结构\n\n1. 首屏：课程名、一句话介绍和体验课入口\n2. 一个真实案例：照片工具、个人主页或表格分析\n3. 普通聊天与 Agent 协作的差别\n4. 十章课程内容和最后要完成的项目\n5. 适合的人，以及不适合的人\n6. 隐私、作业和自动执行的边界\n7. 内测时间、人数和报名方式\n\n## 配图\n\n当前有三张本地 SVG：\n\n- [课程主视觉](assets/agent-thinking-hero.svg)\n- [Agent 协作循环](assets/agent-loop.svg)\n- [适合人群地图](assets/audience-map.svg)\n\n以后可以把它们换成更像真实工作台的插画：桌面上有照片、表格、网页和任务清单，人物正在检查 AI 做出的结果。画面不用出现发光机器人，也不用做成蓝紫色的科技发布会。\n","research":"# Agent Thinking 101 调研说明\n\n这里记录我查过的公开资料，以及它们后来怎样进入课程。它不是完整文献综述，只回答几个和课程设计直接相关的问题：\n\n1. 现在公开 Agent 教程主要在教什么。\n2. 这些教程对普通人、青少年、家长和成年人有什么门槛。\n3. 本课程为什么要从“Agent 思维”和“真实任务”切入。\n\n## 1. Hugging Face Agents Course\n\n链接：https://huggingface.co/learn/agents-course/unit0/introduction\n\nHugging Face 的 Agents Course 是一个完整的开发者向课程。它会讲 Agent 的基础概念、工具、行动、观察、框架和最终项目，也会涉及 smolagents、LlamaIndex、LangGraph 等生态。\n\n我从中拿走的东西：\n\n- Agent 教育需要有项目，而不能只讲概念。\n- 工具、行动、观察是 Agent 和普通聊天 AI 的关键区别。\n- 但如果第一课就从 Python、框架和库开始，普通学习者会被挡在门外。\n\n课里怎么用：\n\n先讲生活和工作场景，再逐步引入工具、上下文、反馈和工作流。让学习者先做出作品，再理解技术名词。\n\n## 2. Anthropic: Building Effective Agents\n\n链接：https://www.anthropic.com/engineering/building-effective-agents\n\nAnthropic 的文章把 agentic systems 分成 workflow 和 agents。workflow 是预先设计好的路径，agent 则由模型根据环境反馈动态决定流程。文章也强调，不要一开始就追求复杂系统，应该从简单、可组合、可检查的模式开始。\n\n我从中拿走的东西：\n\n- 初学者最该学的是可控工作流，而不是幻想“全自动 AI”。\n- prompt chaining、routing、parallelization、orchestrator-workers、evaluator-optimizer 都可以翻译成普通人能懂的协作模式。\n- 检查和反馈是 Agent 思维的一部分，不是事后补丁。\n\n课里怎么用：\n\n第八章专门讲 Agent 工作流，把它翻译成提示链、路由、并行、指挥者-执行者、评审-优化。讲师手册也把“评审-优化”作为最适合普通人立刻练习的模式。\n\n## 3. OpenAI Agents SDK 与 Tools 文档\n\n链接：\n\n- https://developers.openai.com/api/docs/guides/agents\n- https://developers.openai.com/api/docs/guides/tools\n\nOpenAI 的相关文档说明，现代 Agent 不只是模型对话，而是模型、工具、上下文、handoff、trace、文件、代码、搜索、MCP 等能力组成的系统。\n\n我从中拿走的东西：\n\n- Agent 接上工具以后，才能处理文件、代码和网页，而不只是在聊天框里回答。\n- tools、skills、MCP、shell、computer use 等概念可以统一解释为“AI 能接触外部世界的方式”。\n- 对普通人来说，不必先掌握所有工具，但要理解工具意识。\n\n课里怎么用：\n\n第四章讲工具、上下文、记忆和 skill。Prompt 模板库里也加入了 Codex 改项目、修 bug、处理表格、写 skill 草稿等模板。\n\n## 4. Microsoft AI Agents for Beginners\n\n链接：https://github.com/microsoft/ai-agents-for-beginners\n\nMicrosoft 的 AI Agents for Beginners 是一个开发者学习路径，覆盖 Agent 用例、框架、设计模式、工具使用、Agentic RAG、规划、多 Agent、记忆、MCP、生产化等内容。\n\n我从中拿走的东西：\n\n- Agent 开发会反复用到规划、记忆、工具和多 Agent 分工。\n- 记忆、多 Agent、MCP 和工具使用会逐渐进入普通开发工作流。\n- 系统课需要从基础概念走到项目和工作流。\n\n课里怎么用：\n\n保留“设计模式”的骨架，但弱化工程实现细节。学习者先学会什么时候用提示链、什么时候并行、什么时候需要评审，再考虑是否进入框架和代码。\n\n## 5. UNESCO AI Competency Framework for Students\n\n链接：https://www.unesco.org/en/articles/ai-competency-framework-students\n\nUNESCO 的学生 AI 能力框架强调，AI 教育不只是使用工具，还包括理解 AI、批判判断、负责任使用、人与 AI 的关系和创造性应用。\n\n我从中拿走的东西：\n\n- 青少年 AI 教育不能变成“代写作业教程”。\n- 安全、隐私、判断、责任必须进入课程主体。\n- AI literacy 应该包含创造作品，而不只是被动使用。\n\n课里怎么用：\n\n第九章专门讲安全、边界和判断。青少年项目要求保留自己的思考过程，最终项目也要求记录“AI 第一版哪里不好”和“我怎么修改”。\n\n## 6. MIT AI Literacy\n\n链接：https://openlearning.mit.edu/news/ai-literacy-explained\n\nMIT Open Learning 把 AI literacy 讲得很宽：除了理解 AI，还要会判断输出、拿它创作，并对使用结果负责。\n\n我从中拿走的东西：\n\n- AI 素养应该服务真实学习、真实工作和真实创造。\n- 课程不能只教工具按钮，而要教判断和迁移能力。\n\n课里怎么用：\n\n课程定位从“少儿编程”升级为“Agent 思维 / AI 协作能力”。不同人群可以迁移到不同场景：青少年创造作品，成年人处理工作流，家长老师理解边界，效率工具用户延展到 Codex 和 skill。\n\n## 7. 通义灵码智能体模式\n\n链接：https://help.aliyun.com/zh/lingma/qoder-cn/user-guide/agent\n\n通义灵码的智能体模式说明了国产 AI Coding Agent 也在走类似方向：自主规划、工程检索、文件编辑、终端执行、MCP 工具等。\n\n我从中拿走的东西：\n\n- Agent 思维不绑定某个海外工具。\n- 在中文环境里，可以结合通义灵码、豆包、DeepSeek、GLM、Trae、Codex 等不同工具讲。\n- 课程应避免把工具本身当壁垒，而要教可迁移的工作方式。\n\n课里怎么用：\n\n主教程里强调“工具会变，能力稳定”。对外传播包也避免把课程包装成某个软件教程。\n\n## 8. 本课程的差异化结论\n\n公开资料大多偏三类：\n\n- 开发者课程：教框架、工具调用、代码实现。\n- 工具教程：教某个产品怎么点、怎么配置。\n- prompt 教程：教模板和话术。\n\n本课程选择另一条路：\n\n先教普通人如何成为 Agent 的指挥者。\n\n也就是：\n\n- 先讲目标，而不是先讲模型。\n- 先讲真实任务，而不是先讲框架。\n- 先讲检查和责任，而不是只讲效率。\n- 先做作品和工作流，再解释工具名词。\n\n最后确定下来的课程定位是：面向普通人，围绕真实任务练习怎样和 Agent 协作。开发框架会提到，但不会成为入门门槛。\n","visual":"# Agent Thinking 101 视觉资产\n\n这里记录现有配图、各自适合放在哪里，以及之后可能生成的新图。先把用途写清楚，免得图片越做越多，最后却不知道该放哪一页。\n\n## 当前本地 SVG\n\n### 1. 课程主视觉\n\n![Agent Thinking 101 课程主视觉](assets/agent-thinking-hero.svg)\n\n用途：\n\n- 课程介绍页首图。\n- 小红书封面草稿。\n- Notion / 飞书文档头图。\n- 线下试讲首页投影。\n\n图里要说清楚：\n\n从“问一句、答一句”的普通 AI 使用，升级到“目标、工具、反馈、作品”的 Agent 思维。\n\n### 2. Agent 协作循环\n\n![Agent 协作循环](assets/agent-loop.svg)\n\n用途：\n\n- 第一章解释 Agent 思维。\n- 第三章解释先计划、再执行、再检查。\n- 讲师手册中作为课堂板书参考。\n\n图里要说清楚：\n\n目标、上下文、计划、工具、反馈、检查、记忆/skill 是一个循环，不是一次性 prompt。\n\n### 3. 适合人群地图\n\n![适合人群地图](assets/audience-map.svg)\n\n用途：\n\n- 对外摘要版。\n- 课程页“适合谁”模块。\n- 招生或内测沟通时说明课程不只适合少儿。\n\n图里要说清楚：\n\n同一种 Agent 思维，可以服务青少年、成年人、家长老师和效率工具用户。\n\n## Packy 图片生成说明\n\n当前环境没有检测到 `PACKY_SORA_TOKEN`，所以本轮没有直接调用 Packy 生成图片。为了避免密钥出现在命令历史或文件里，后续如果要生成图片，请先在本地终端里设置环境变量：\n\n```bash\nexport PACKY_SORA_TOKEN=\"你的 Packy token\"\n```\n\n然后可以使用 `packy-imagegen` 生成更有传播感的图片。\n\n## Packy 生成提示词\n\n### 提示词 1：课程主视觉插画\n\n```text\n一张现代、温暖、清爽的课程主视觉插画。画面中心是一个普通年轻人坐在电脑前，旁边不是机器人形象，而是一个抽象的 AI 协作者界面。屏幕周围浮现出网页作品、Excel 表格、旅行计划、学习卡片、代码窗口和任务看板，表达“和 AI Agent 一起做事”。风格简洁、有教育感、适合中文课程封面，不要科幻感过强，不要赛博朋克，不要过度蓝紫渐变。画面留出上方标题空间。无英文文字。\n```\n\n建议尺寸：`1536x1024`\n\n### 提示词 2：从聊天到做事\n\n```text\n一张信息图风格的插画，左侧是普通聊天气泡，内容很零散；右侧是一个清晰的任务工作台，包括目标、计划、工具、检查和作品。中间有自然的转变箭头，表达从“问 AI”到“让 AI 做事”。风格现代、简洁、适合教育课程，不要复杂背景，不要真实人物照片，不要英文文字。\n```\n\n建议尺寸：`1536x1024`\n\n### 提示词 3：青少年和成年人都能用\n\n```text\n一张课程宣传插画，画面分成两半但整体统一：一边是青少年用 AI 做个人主页、小游戏和学习助手；另一边是成年人用 AI 处理表格、写报告、做旅行计划和小工具。整体表达同一种 Agent 思维适合不同年龄和场景。风格温暖、干净、真实，不要卡通过度，不要商务广告感，不要英文文字。\n```\n\n建议尺寸：`1536x1024`\n\n### 提示词 4：Agent 协作循环\n\n```text\n一张中文教育课程用的流程视觉图，展示一个人和 AI Agent 协作的循环：目标、上下文、计划、工具、反馈、检查、记忆。画面可以用图标和流程节点表示，风格清晰、现代、适合放在课程 PPT 里。不要使用复杂小字，不要英文文字。\n```\n\n建议尺寸：`1536x1024`\n"};
+window.__EMBEDDED_ASSETS__ = {"/docs/assets/agent-thinking-hero.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgVGhpbmtpbmcgMTAxIGNvdXJzZSBoZXJvPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBjbGVhbiBjb3Vyc2UgaGVybyBzaG93aW5nIGEgcGVyc29uIHR1cm5pbmcgaWRlYXMgaW50byB0YXNrcywgdG9vbHMsIGZlZWRiYWNrLCBhbmQgZmluaXNoZWQgd29ya3Mgd2l0aCBhbiBBSSBhZ2VudC48L2Rlc2M+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y3ZjRlZCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNlZWY2ZjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmMGZiIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIxOCIgc3RkRGV2aWF0aW9uPSIyNCIgZmxvb2QtY29sb3I9IiMxNjIwMmEiIGZsb29kLW9wYWNpdHk9IjAuMTYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDg4KSI+CiAgICA8dGV4dCB4PSIwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3NCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzE3MjEyYiI+5ZKMIEFJIEFnZW50IOS4gOi1t+WBmuS6izwvdGV4dD4KICAgIDx0ZXh0IHg9IjAiIHk9IjEyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzUzNjA2YyI+5LuO4oCc6ZeuIEFJ4oCd5Yiw4oCc5oyH5oylIEFJIOWujOaIkOS7u+WKoeKAnTwvdGV4dD4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAgMjMwKSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDMwIiBoZWlnaHQ9IjQ3MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPuaZrumAmiBBSSDkvb/nlKg8L3RleHQ+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCA5OCkiPgogICAgICA8cmVjdCB3aWR0aD0iMzU0IiBoZWlnaHQ9IjY0IiByeD0iMTgiIGZpbGw9IiNmMGYzZjYiLz4KICAgICAgPHRleHQgeD0iMjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTI2MDZiIj7luK7miJHmlLnkuIDmrrXmloflrZc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCAxODQpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSIjZjBmM2Y2Ii8+CiAgICAgIDx0ZXh0IHg9IjI0IiB5PSI0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzUyNjA2YiI+5biu5oiR5YaZ5Liq5qCH6aKYPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzggMjcwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSIzMzAiIGhlaWdodD0iNjQiIHJ4PSIxOCIgZmlsbD0iI2YwZjNmNiIvPgogICAgICA8dGV4dCB4PSIyNCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MjYwNmIiPuaAu+e7k+i/meevh+aWh+eroDwvdGV4dD4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjM4IiB5PSI0MTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIGZpbGw9IiM2YTc2ODIiPumXruS4gOWPpe+8jOetlOS4gOWPpTwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwIDQ1NSkiPgogICAgPHBhdGggZD0iTTAgMCBDOTAgLTUyIDE3MCAtNTIgMjYwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmN2E4YyIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNMjUyIC00OCBMMzEwIDAgTDI1MiA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWY3YThjIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5MzAgMTk1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDcwIiBoZWlnaHQ9IjU0MCIgcng9IjMwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPkFnZW50IOaAnee7tDwvdGV4dD4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUyIDEwMCkiPgogICAgICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U4ZjRmMiIvPgogICAgICA8dGV4dCB4PSI1MCIgeT0iNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxZjdhOGMiPuebruaghzwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0NSAxMDApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNmZmYxZGYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjYTY1ZjAwIj7lt6Xlhbc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MiAyNTApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNlZWYwZmYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjNTQ1MmEzIj7lj43ppog8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMjUwKSI+CiAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjZjRlYmY4Ii8+CiAgICAgIDx0ZXh0IHg9IjUwIiB5PSI1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzdhNGI4ZiI+5L2c5ZOBPC90ZXh0PgogICAgPC9nPgogICAgPHRleHQgeD0iMzgiIHk9IjQ0OCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K+05riF5qWa55uu5qCH77yM5ouG5oiQ5q2l6aqk77yMPC90ZXh0PgogICAgPHRleHQgeD0iMzgiIHk9IjQ4NCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K6pIEFJIOeUqOW3peWFt+aJp+ihjO+8jOWGjeeUseS6uuajgOafpeOAgjwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDc5MCkiPgogICAgPHJlY3Qgd2lkdGg9IjE0MDAiIGhlaWdodD0iMiIgZmlsbD0iI2Q4ZGRlMiIvPgogICAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1MzYwNmMiPkFnZW50IFRoaW5raW5nIDEwMSDCtyDpnaLlkJHpnZLlsJHlubTjgIHmiJDlubTkurrjgIHlrrbplb/ogIHluIjlkozmlYjnjoflt6XlhbfnlKjmiLc8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K","docs/assets/agent-thinking-hero.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgVGhpbmtpbmcgMTAxIGNvdXJzZSBoZXJvPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBjbGVhbiBjb3Vyc2UgaGVybyBzaG93aW5nIGEgcGVyc29uIHR1cm5pbmcgaWRlYXMgaW50byB0YXNrcywgdG9vbHMsIGZlZWRiYWNrLCBhbmQgZmluaXNoZWQgd29ya3Mgd2l0aCBhbiBBSSBhZ2VudC48L2Rlc2M+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y3ZjRlZCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNlZWY2ZjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmMGZiIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIxOCIgc3RkRGV2aWF0aW9uPSIyNCIgZmxvb2QtY29sb3I9IiMxNjIwMmEiIGZsb29kLW9wYWNpdHk9IjAuMTYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDg4KSI+CiAgICA8dGV4dCB4PSIwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3NCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzE3MjEyYiI+5ZKMIEFJIEFnZW50IOS4gOi1t+WBmuS6izwvdGV4dD4KICAgIDx0ZXh0IHg9IjAiIHk9IjEyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzUzNjA2YyI+5LuO4oCc6ZeuIEFJ4oCd5Yiw4oCc5oyH5oylIEFJIOWujOaIkOS7u+WKoeKAnTwvdGV4dD4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAgMjMwKSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDMwIiBoZWlnaHQ9IjQ3MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPuaZrumAmiBBSSDkvb/nlKg8L3RleHQ+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCA5OCkiPgogICAgICA8cmVjdCB3aWR0aD0iMzU0IiBoZWlnaHQ9IjY0IiByeD0iMTgiIGZpbGw9IiNmMGYzZjYiLz4KICAgICAgPHRleHQgeD0iMjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTI2MDZiIj7luK7miJHmlLnkuIDmrrXmloflrZc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCAxODQpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSIjZjBmM2Y2Ii8+CiAgICAgIDx0ZXh0IHg9IjI0IiB5PSI0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzUyNjA2YiI+5biu5oiR5YaZ5Liq5qCH6aKYPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzggMjcwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSIzMzAiIGhlaWdodD0iNjQiIHJ4PSIxOCIgZmlsbD0iI2YwZjNmNiIvPgogICAgICA8dGV4dCB4PSIyNCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MjYwNmIiPuaAu+e7k+i/meevh+aWh+eroDwvdGV4dD4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjM4IiB5PSI0MTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIGZpbGw9IiM2YTc2ODIiPumXruS4gOWPpe+8jOetlOS4gOWPpTwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwIDQ1NSkiPgogICAgPHBhdGggZD0iTTAgMCBDOTAgLTUyIDE3MCAtNTIgMjYwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmN2E4YyIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNMjUyIC00OCBMMzEwIDAgTDI1MiA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWY3YThjIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5MzAgMTk1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDcwIiBoZWlnaHQ9IjU0MCIgcng9IjMwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPkFnZW50IOaAnee7tDwvdGV4dD4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUyIDEwMCkiPgogICAgICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U4ZjRmMiIvPgogICAgICA8dGV4dCB4PSI1MCIgeT0iNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxZjdhOGMiPuebruaghzwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0NSAxMDApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNmZmYxZGYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjYTY1ZjAwIj7lt6Xlhbc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MiAyNTApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNlZWYwZmYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjNTQ1MmEzIj7lj43ppog8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMjUwKSI+CiAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjZjRlYmY4Ii8+CiAgICAgIDx0ZXh0IHg9IjUwIiB5PSI1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzdhNGI4ZiI+5L2c5ZOBPC90ZXh0PgogICAgPC9nPgogICAgPHRleHQgeD0iMzgiIHk9IjQ0OCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K+05riF5qWa55uu5qCH77yM5ouG5oiQ5q2l6aqk77yMPC90ZXh0PgogICAgPHRleHQgeD0iMzgiIHk9IjQ4NCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K6pIEFJIOeUqOW3peWFt+aJp+ihjO+8jOWGjeeUseS6uuajgOafpeOAgjwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDc5MCkiPgogICAgPHJlY3Qgd2lkdGg9IjE0MDAiIGhlaWdodD0iMiIgZmlsbD0iI2Q4ZGRlMiIvPgogICAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1MzYwNmMiPkFnZW50IFRoaW5raW5nIDEwMSDCtyDpnaLlkJHpnZLlsJHlubTjgIHmiJDlubTkurrjgIHlrrbplb/ogIHluIjlkozmlYjnjoflt6XlhbfnlKjmiLc8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K","assets/agent-thinking-hero.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgVGhpbmtpbmcgMTAxIGNvdXJzZSBoZXJvPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBjbGVhbiBjb3Vyc2UgaGVybyBzaG93aW5nIGEgcGVyc29uIHR1cm5pbmcgaWRlYXMgaW50byB0YXNrcywgdG9vbHMsIGZlZWRiYWNrLCBhbmQgZmluaXNoZWQgd29ya3Mgd2l0aCBhbiBBSSBhZ2VudC48L2Rlc2M+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Y3ZjRlZCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNlZWY2ZjQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmMGZiIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0ic29mdFNoYWRvdyIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+CiAgICAgIDxmZURyb3BTaGFkb3cgZHg9IjAiIGR5PSIxOCIgc3RkRGV2aWF0aW9uPSIyNCIgZmxvb2QtY29sb3I9IiMxNjIwMmEiIGZsb29kLW9wYWNpdHk9IjAuMTYiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDg4KSI+CiAgICA8dGV4dCB4PSIwIiB5PSI3MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3NCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzE3MjEyYiI+5ZKMIEFJIEFnZW50IOS4gOi1t+WBmuS6izwvdGV4dD4KICAgIDx0ZXh0IHg9IjAiIHk9IjEyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzUzNjA2YyI+5LuO4oCc6ZeuIEFJ4oCd5Yiw4oCc5oyH5oylIEFJIOWujOaIkOS7u+WKoeKAnTwvdGV4dD4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAgMjMwKSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDMwIiBoZWlnaHQ9IjQ3MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPuaZrumAmiBBSSDkvb/nlKg8L3RleHQ+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCA5OCkiPgogICAgICA8cmVjdCB3aWR0aD0iMzU0IiBoZWlnaHQ9IjY0IiByeD0iMTgiIGZpbGw9IiNmMGYzZjYiLz4KICAgICAgPHRleHQgeD0iMjQiIHk9IjQwIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTI2MDZiIj7luK7miJHmlLnkuIDmrrXmloflrZc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzOCAxODQpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSI2NCIgcng9IjE4IiBmaWxsPSIjZjBmM2Y2Ii8+CiAgICAgIDx0ZXh0IHg9IjI0IiB5PSI0MCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzUyNjA2YiI+5biu5oiR5YaZ5Liq5qCH6aKYPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzggMjcwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSIzMzAiIGhlaWdodD0iNjQiIHJ4PSIxOCIgZmlsbD0iI2YwZjNmNiIvPgogICAgICA8dGV4dCB4PSIyNCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MjYwNmIiPuaAu+e7k+i/meevh+aWh+eroDwvdGV4dD4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjM4IiB5PSI0MTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjMiIGZpbGw9IiM2YTc2ODIiPumXruS4gOWPpe+8jOetlOS4gOWPpTwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwIDQ1NSkiPgogICAgPHBhdGggZD0iTTAgMCBDOTAgLTUyIDE3MCAtNTIgMjYwIDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmN2E4YyIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cGF0aCBkPSJNMjUyIC00OCBMMzEwIDAgTDI1MiA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWY3YThjIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICA8L2c+CiAgPGcgZmlsdGVyPSJ1cmwoI3NvZnRTaGFkb3cpIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5MzAgMTk1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDcwIiBoZWlnaHQ9IjU0MCIgcng9IjMwIiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8dGV4dCB4PSIzOCIgeT0iNjIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxNzIxMmIiPkFnZW50IOaAnee7tDwvdGV4dD4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUyIDEwMCkiPgogICAgICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U4ZjRmMiIvPgogICAgICA8dGV4dCB4PSI1MCIgeT0iNTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMxZjdhOGMiPuebruaghzwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0NSAxMDApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNmZmYxZGYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjYTY1ZjAwIj7lt6Xlhbc8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MiAyNTApIj4KICAgICAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNTAiIGZpbGw9IiNlZWYwZmYiLz4KICAgICAgPHRleHQgeD0iNTAiIHk9IjU4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjNTQ1MmEzIj7lj43ppog8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMjUwKSI+CiAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSIjZjRlYmY4Ii8+CiAgICAgIDx0ZXh0IHg9IjUwIiB5PSI1OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzdhNGI4ZiI+5L2c5ZOBPC90ZXh0PgogICAgPC9nPgogICAgPHRleHQgeD0iMzgiIHk9IjQ0OCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K+05riF5qWa55uu5qCH77yM5ouG5oiQ5q2l6aqk77yMPC90ZXh0PgogICAgPHRleHQgeD0iMzgiIHk9IjQ4NCIgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMyIgZmlsbD0iIzUyNjA2YiI+6K6pIEFJIOeUqOW3peWFt+aJp+ihjO+8jOWGjeeUseS6uuajgOafpeOAgjwvdGV4dD4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwIDc5MCkiPgogICAgPHJlY3Qgd2lkdGg9IjE0MDAiIGhlaWdodD0iMiIgZmlsbD0iI2Q4ZGRlMiIvPgogICAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM1MzYwNmMiPkFnZW50IFRoaW5raW5nIDEwMSDCtyDpnaLlkJHpnZLlsJHlubTjgIHmiJDlubTkurrjgIHlrrbplb/ogIHluIjlkozmlYjnjoflt6XlhbfnlKjmiLc8L3RleHQ+CiAgPC9nPgo8L3N2Zz4K","/docs/assets/agent-loop.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgY29sbGFib3JhdGlvbiBsb29wPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBsb29wIGRpYWdyYW0gZm9yIEFnZW50IHRoaW5raW5nOiBnb2FsLCBjb250ZXh0LCBwbGFuLCB0b29scywgZmVlZGJhY2ssIGNoZWNrLCBhbmQgbWVtb3J5LjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmYmZhZjciLz4KICA8dGV4dCB4PSI3MDAiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj5BZ2VudCDljY/kvZzlvqrnjq88L3RleHQ+CiAgPHRleHQgeD0iNzAwIiB5PSIxMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NTcxN2QiPuebruaghyDihpIg5LiK5LiL5paHIOKGkiDorqHliJIg4oaSIOW3peWFtyDihpIg5Y+N6aaIIOKGkiDmo4Dmn6Ug4oaSIOiusOW/hjwvdGV4dD4KICA8ZGVmcz4KICAgIDxtYXJrZXIgaWQ9ImFycm93IiBtYXJrZXJXaWR0aD0iMTYiIG1hcmtlckhlaWdodD0iMTYiIHJlZlg9IjEyIiByZWZZPSI4IiBvcmllbnQ9ImF1dG8iPgogICAgICA8cGF0aCBkPSJNMiwyIEwxNCw4IEwyLDE0IFoiIGZpbGw9IiMyYzZlN2YiLz4KICAgIDwvbWFya2VyPgogICAgPGZpbHRlciBpZD0ic2hhZG93IiB4PSItMjAlIiB5PSItMjAlIiB3aWR0aD0iMTQwJSIgaGVpZ2h0PSIxNDAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjEyIiBzdGREZXZpYXRpb249IjE2IiBmbG9vZC1jb2xvcj0iIzE3MjEyYiIgZmxvb2Qtb3BhY2l0eT0iMC4xMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJjNmU3ZiIgc3Ryb2tlLXdpZHRoPSI3IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSI+CiAgICA8cGF0aCBkPSJNNzAwIDIwNSBDOTMwIDIwNSAxMTAwIDM1MCAxMTAwIDUyMCIvPgogICAgPHBhdGggZD0iTTEwODUgNTYwIEMxMDUwIDczNSA4ODAgODA1IDcwMCA4MDUiLz4KICAgIDxwYXRoIGQ9Ik02NTAgODA1IEM0MjAgODA1IDI2MCA2NjAgMjYwIDUyMCIvPgogICAgPHBhdGggZD0iTTI2MCA0ODAgQzI2MCAzMTUgNDMwIDIwNSA2NTAgMjA1Ii8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzaGFkb3cpIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3NSAxNzApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI1MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMjUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4xLiDnm67moIc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyNSIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaIkeimgeWujOaIkOS7gOS5iDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk0MCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4yLiDkuIrkuIvmloc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuadkOaWmeOAgeWBj+WlveOAgemZkOWItjwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkwMCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4zLiDorqHliJI8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuWFiOaLhuatpemqpOWGjeaJp+ihjDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3MCA3MTApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj40LiDlt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaWh+S7tuOAgeS7o+eggeOAgeihqOagvDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj41LiDlj43ppog8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPueci+e7k+aenO+8jOe7p+e7reaUuTwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj42LiDmo4Dmn6U8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuS6uuadpemqjOaUtuWSjOi0n+i0ozwvdGV4dD4KICAgIDwvZz4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTI1IDM5NSkiPgogICAgPHJlY3Qgd2lkdGg9IjM1MCIgaGVpZ2h0PSIxNjAiIHJ4PSIzMiIgZmlsbD0iI2VhZjVmMyIgc3Ryb2tlPSIjMmM2ZTdmIiBzdHJva2Utd2lkdGg9IjMiLz4KICAgIDx0ZXh0IHg9IjE3NSIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxZjU5NjciPuayiea3gOaIkOiusOW/hiAvIHNraWxsPC90ZXh0PgogICAgPHRleHQgeD0iMTc1IiB5PSIxMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjEiIGZpbGw9IiMzNTViNjQiPuaKiuS4gOasoee7j+mqjOWPmOaIkOS4i+asoeWPr+WkjeeUqOeahOa1geeoizwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=","docs/assets/agent-loop.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgY29sbGFib3JhdGlvbiBsb29wPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBsb29wIGRpYWdyYW0gZm9yIEFnZW50IHRoaW5raW5nOiBnb2FsLCBjb250ZXh0LCBwbGFuLCB0b29scywgZmVlZGJhY2ssIGNoZWNrLCBhbmQgbWVtb3J5LjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmYmZhZjciLz4KICA8dGV4dCB4PSI3MDAiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj5BZ2VudCDljY/kvZzlvqrnjq88L3RleHQ+CiAgPHRleHQgeD0iNzAwIiB5PSIxMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NTcxN2QiPuebruaghyDihpIg5LiK5LiL5paHIOKGkiDorqHliJIg4oaSIOW3peWFtyDihpIg5Y+N6aaIIOKGkiDmo4Dmn6Ug4oaSIOiusOW/hjwvdGV4dD4KICA8ZGVmcz4KICAgIDxtYXJrZXIgaWQ9ImFycm93IiBtYXJrZXJXaWR0aD0iMTYiIG1hcmtlckhlaWdodD0iMTYiIHJlZlg9IjEyIiByZWZZPSI4IiBvcmllbnQ9ImF1dG8iPgogICAgICA8cGF0aCBkPSJNMiwyIEwxNCw4IEwyLDE0IFoiIGZpbGw9IiMyYzZlN2YiLz4KICAgIDwvbWFya2VyPgogICAgPGZpbHRlciBpZD0ic2hhZG93IiB4PSItMjAlIiB5PSItMjAlIiB3aWR0aD0iMTQwJSIgaGVpZ2h0PSIxNDAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjEyIiBzdGREZXZpYXRpb249IjE2IiBmbG9vZC1jb2xvcj0iIzE3MjEyYiIgZmxvb2Qtb3BhY2l0eT0iMC4xMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJjNmU3ZiIgc3Ryb2tlLXdpZHRoPSI3IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSI+CiAgICA8cGF0aCBkPSJNNzAwIDIwNSBDOTMwIDIwNSAxMTAwIDM1MCAxMTAwIDUyMCIvPgogICAgPHBhdGggZD0iTTEwODUgNTYwIEMxMDUwIDczNSA4ODAgODA1IDcwMCA4MDUiLz4KICAgIDxwYXRoIGQ9Ik02NTAgODA1IEM0MjAgODA1IDI2MCA2NjAgMjYwIDUyMCIvPgogICAgPHBhdGggZD0iTTI2MCA0ODAgQzI2MCAzMTUgNDMwIDIwNSA2NTAgMjA1Ii8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzaGFkb3cpIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3NSAxNzApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI1MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMjUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4xLiDnm67moIc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyNSIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaIkeimgeWujOaIkOS7gOS5iDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk0MCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4yLiDkuIrkuIvmloc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuadkOaWmeOAgeWBj+WlveOAgemZkOWItjwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkwMCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4zLiDorqHliJI8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuWFiOaLhuatpemqpOWGjeaJp+ihjDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3MCA3MTApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj40LiDlt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaWh+S7tuOAgeS7o+eggeOAgeihqOagvDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj41LiDlj43ppog8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPueci+e7k+aenO+8jOe7p+e7reaUuTwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj42LiDmo4Dmn6U8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuS6uuadpemqjOaUtuWSjOi0n+i0ozwvdGV4dD4KICAgIDwvZz4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTI1IDM5NSkiPgogICAgPHJlY3Qgd2lkdGg9IjM1MCIgaGVpZ2h0PSIxNjAiIHJ4PSIzMiIgZmlsbD0iI2VhZjVmMyIgc3Ryb2tlPSIjMmM2ZTdmIiBzdHJva2Utd2lkdGg9IjMiLz4KICAgIDx0ZXh0IHg9IjE3NSIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxZjU5NjciPuayiea3gOaIkOiusOW/hiAvIHNraWxsPC90ZXh0PgogICAgPHRleHQgeD0iMTc1IiB5PSIxMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjEiIGZpbGw9IiMzNTViNjQiPuaKiuS4gOasoee7j+mqjOWPmOaIkOS4i+asoeWPr+WkjeeUqOeahOa1geeoizwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=","assets/agent-loop.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QWdlbnQgY29sbGFib3JhdGlvbiBsb29wPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+QSBsb29wIGRpYWdyYW0gZm9yIEFnZW50IHRoaW5raW5nOiBnb2FsLCBjb250ZXh0LCBwbGFuLCB0b29scywgZmVlZGJhY2ssIGNoZWNrLCBhbmQgbWVtb3J5LjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmYmZhZjciLz4KICA8dGV4dCB4PSI3MDAiIHk9IjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj5BZ2VudCDljY/kvZzlvqrnjq88L3RleHQ+CiAgPHRleHQgeD0iNzAwIiB5PSIxMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiM2NTcxN2QiPuebruaghyDihpIg5LiK5LiL5paHIOKGkiDorqHliJIg4oaSIOW3peWFtyDihpIg5Y+N6aaIIOKGkiDmo4Dmn6Ug4oaSIOiusOW/hjwvdGV4dD4KICA8ZGVmcz4KICAgIDxtYXJrZXIgaWQ9ImFycm93IiBtYXJrZXJXaWR0aD0iMTYiIG1hcmtlckhlaWdodD0iMTYiIHJlZlg9IjEyIiByZWZZPSI4IiBvcmllbnQ9ImF1dG8iPgogICAgICA8cGF0aCBkPSJNMiwyIEwxNCw4IEwyLDE0IFoiIGZpbGw9IiMyYzZlN2YiLz4KICAgIDwvbWFya2VyPgogICAgPGZpbHRlciBpZD0ic2hhZG93IiB4PSItMjAlIiB5PSItMjAlIiB3aWR0aD0iMTQwJSIgaGVpZ2h0PSIxNDAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjEyIiBzdGREZXZpYXRpb249IjE2IiBmbG9vZC1jb2xvcj0iIzE3MjEyYiIgZmxvb2Qtb3BhY2l0eT0iMC4xMyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJjNmU3ZiIgc3Ryb2tlLXdpZHRoPSI3IiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSI+CiAgICA8cGF0aCBkPSJNNzAwIDIwNSBDOTMwIDIwNSAxMTAwIDM1MCAxMTAwIDUyMCIvPgogICAgPHBhdGggZD0iTTEwODUgNTYwIEMxMDUwIDczNSA4ODAgODA1IDcwMCA4MDUiLz4KICAgIDxwYXRoIGQ9Ik02NTAgODA1IEM0MjAgODA1IDI2MCA2NjAgMjYwIDUyMCIvPgogICAgPHBhdGggZD0iTTI2MCA0ODAgQzI2MCAzMTUgNDMwIDIwNSA2NTAgMjA1Ii8+CiAgPC9nPgogIDxnIGZpbHRlcj0idXJsKCNzaGFkb3cpIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3NSAxNzApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI1MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMjUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4xLiDnm67moIc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyNSIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaIkeimgeWujOaIkOS7gOS5iDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk0MCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4yLiDkuIrkuIvmloc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuadkOaWmeOAgeWBj+WlveOAgemZkOWItjwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkwMCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj4zLiDorqHliJI8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuWFiOaLhuatpemqpOWGjeaJp+ihjDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDU3MCA3MTApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj40LiDlt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuaWh+S7tuOAgeS7o+eggeOAgeihqOagvDwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI0MCA2MjApIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj41LiDlj43ppog8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPueci+e7k+aenO+8jOe7p+e7reaUuTwvdGV4dD4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMCAzNjUpIj4KICAgICAgPHJlY3Qgd2lkdGg9IjI2MCIgaGVpZ2h0PSIxMjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICA8dGV4dCB4PSIxMzAiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjMTcyMTJiIj42LiDmo4Dmn6U8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMCIgeT0iODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM2MzcwN2MiPuS6uuadpemqjOaUtuWSjOi0n+i0ozwvdGV4dD4KICAgIDwvZz4KICA8L2c+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTI1IDM5NSkiPgogICAgPHJlY3Qgd2lkdGg9IjM1MCIgaGVpZ2h0PSIxNjAiIHJ4PSIzMiIgZmlsbD0iI2VhZjVmMyIgc3Ryb2tlPSIjMmM2ZTdmIiBzdHJva2Utd2lkdGg9IjMiLz4KICAgIDx0ZXh0IHg9IjE3NSIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxZjU5NjciPuayiea3gOaIkOiusOW/hiAvIHNraWxsPC90ZXh0PgogICAgPHRleHQgeD0iMTc1IiB5PSIxMTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgJ1BpbmdGYW5nIFNDJywgJ01pY3Jvc29mdCBZYUhlaScsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjEiIGZpbGw9IiMzNTViNjQiPuaKiuS4gOasoee7j+mqjOWPmOaIkOS4i+asoeWPr+WkjeeUqOeahOa1geeoizwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo=","/docs/assets/audience-map.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QXVkaWVuY2UgbWFwIGZvciBBZ2VudCBUaGlua2luZyAxMDE8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5BIGZvdXIgcXVhZHJhbnQgYXVkaWVuY2UgbWFwIHNob3dpbmcgaG93IEFnZW50IFRoaW5raW5nIGhlbHBzIHRlZW5hZ2VycywgYWR1bHRzLCBwYXJlbnRzLCB0ZWFjaGVycywgYW5kIHByb2R1Y3Rpdml0eSB0b29sIHVzZXJzLjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmOGZhZjkiLz4KICA8dGV4dCB4PSI3MDAiIHk9Ijc4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lkIzkuIDnp40gQWdlbnQg5oCd57u077yM5LiN5ZCM5Lq65pyJ5LiN5ZCM55So5rOVPC90ZXh0PgogIDx0ZXh0IHg9IjcwMCIgeT0iMTI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmaWxsPSIjNjU3MTdkIj7or77nqIvlrprkvY3kuI3lj6rlsZ7kuo7lsJHlhL/nvJbnqIvvvIzkuZ/kuI3lj6rlsZ7kuo7nqIvluo/lkZg8L3RleHQ+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTQiIHN0ZERldmlhdGlvbj0iMTgiIGZsb29kLWNvbG9yPSIjMTcyMTJiIiBmbG9vZC1vcGFjaXR5PSIwLjEyIi8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGcgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZThmNGYyIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzFmN2E4YyI+5bCRPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7pnZLlsJHlubQ8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lgZrkuKrkurrkuLvpobXjgIHlsI/muLjmiI/jgIHmlYXkuovkuabjgIHlrabkuaDliqnmiYs8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiuWFtOi2o+WPmOaIkOS9nOWTgTwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6KGo6L6+5oOz5rOV44CB6L+t5Luj44CB5bGV56S6PC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZmZmMWRmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2E2NWYwMCI+5oiQPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7miJDlubTkuro8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lpITnkIYgRXhjZWzjgIHmiqXlkYrjgIHosIPnoJTjgIHml4XooYzjgIHlsI/lt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiumHjeWkjeW3peS9nOa1geeoi+WMljwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6K6h5YiS44CB6aqM5pS244CB5rKJ5reAIHNraWxsPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDQ5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZWVmMGZmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzU0NTJhMyI+5a62PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lrrbplb8gLyDogIHluIg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7nkIbop6MgQUkg5pWZ6IKy44CB6L6555WM44CB5a6J5YWo5ZKM5L2c5ZOB5a+85ZCRPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrkuI3mioogQUkg5b2T5Luj5YaZ5ZmoPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJrmj5Dpl67jgIHmo4Dmn6XjgIHotJ/otKPku7vkvb/nlKg8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MjAgNDkwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSI1NjAiIGhlaWdodD0iMjUwIiByeD0iMjgiIGZpbGw9IiNmZmZmZmYiLz4KICAgICAgPGNpcmNsZSBjeD0iNzAiIGN5PSI3MiIgcj0iMzQiIGZpbGw9IiNmNGViZjgiLz4KICAgICAgPHRleHQgeD0iNzAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjN2E0YjhmIj7mlYg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iNzAiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxNzIxMmIiPuaViOeOh+W3peWFt+eUqOaItzwvdGV4dD4KICAgICAgPHRleHQgeD0iMTIwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MzYwNmMiPkNvZGV444CBQUkgQ29kaW5nIEFnZW5044CBTUNQ44CB6Ieq5Yqo5YyWPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrorqkgQUkg6L+b5YWl55yf5a6e5bel5L2c546w5Zy6PC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJror7vpobnnm67jgIHmlLnmlofku7bjgIHot5Hpqozor4E8L3RleHQ+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K","docs/assets/audience-map.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QXVkaWVuY2UgbWFwIGZvciBBZ2VudCBUaGlua2luZyAxMDE8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5BIGZvdXIgcXVhZHJhbnQgYXVkaWVuY2UgbWFwIHNob3dpbmcgaG93IEFnZW50IFRoaW5raW5nIGhlbHBzIHRlZW5hZ2VycywgYWR1bHRzLCBwYXJlbnRzLCB0ZWFjaGVycywgYW5kIHByb2R1Y3Rpdml0eSB0b29sIHVzZXJzLjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmOGZhZjkiLz4KICA8dGV4dCB4PSI3MDAiIHk9Ijc4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lkIzkuIDnp40gQWdlbnQg5oCd57u077yM5LiN5ZCM5Lq65pyJ5LiN5ZCM55So5rOVPC90ZXh0PgogIDx0ZXh0IHg9IjcwMCIgeT0iMTI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmaWxsPSIjNjU3MTdkIj7or77nqIvlrprkvY3kuI3lj6rlsZ7kuo7lsJHlhL/nvJbnqIvvvIzkuZ/kuI3lj6rlsZ7kuo7nqIvluo/lkZg8L3RleHQ+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTQiIHN0ZERldmlhdGlvbj0iMTgiIGZsb29kLWNvbG9yPSIjMTcyMTJiIiBmbG9vZC1vcGFjaXR5PSIwLjEyIi8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGcgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZThmNGYyIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzFmN2E4YyI+5bCRPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7pnZLlsJHlubQ8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lgZrkuKrkurrkuLvpobXjgIHlsI/muLjmiI/jgIHmlYXkuovkuabjgIHlrabkuaDliqnmiYs8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiuWFtOi2o+WPmOaIkOS9nOWTgTwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6KGo6L6+5oOz5rOV44CB6L+t5Luj44CB5bGV56S6PC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZmZmMWRmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2E2NWYwMCI+5oiQPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7miJDlubTkuro8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lpITnkIYgRXhjZWzjgIHmiqXlkYrjgIHosIPnoJTjgIHml4XooYzjgIHlsI/lt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiumHjeWkjeW3peS9nOa1geeoi+WMljwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6K6h5YiS44CB6aqM5pS244CB5rKJ5reAIHNraWxsPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDQ5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZWVmMGZmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzU0NTJhMyI+5a62PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lrrbplb8gLyDogIHluIg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7nkIbop6MgQUkg5pWZ6IKy44CB6L6555WM44CB5a6J5YWo5ZKM5L2c5ZOB5a+85ZCRPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrkuI3mioogQUkg5b2T5Luj5YaZ5ZmoPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJrmj5Dpl67jgIHmo4Dmn6XjgIHotJ/otKPku7vkvb/nlKg8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MjAgNDkwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSI1NjAiIGhlaWdodD0iMjUwIiByeD0iMjgiIGZpbGw9IiNmZmZmZmYiLz4KICAgICAgPGNpcmNsZSBjeD0iNzAiIGN5PSI3MiIgcj0iMzQiIGZpbGw9IiNmNGViZjgiLz4KICAgICAgPHRleHQgeD0iNzAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjN2E0YjhmIj7mlYg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iNzAiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxNzIxMmIiPuaViOeOh+W3peWFt+eUqOaItzwvdGV4dD4KICAgICAgPHRleHQgeD0iMTIwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MzYwNmMiPkNvZGV444CBQUkgQ29kaW5nIEFnZW5044CBTUNQ44CB6Ieq5Yqo5YyWPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrorqkgQUkg6L+b5YWl55yf5a6e5bel5L2c546w5Zy6PC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJror7vpobnnm67jgIHmlLnmlofku7bjgIHot5Hpqozor4E8L3RleHQ+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K","assets/audience-map.svg":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+CiAgPHRpdGxlIGlkPSJ0aXRsZSI+QXVkaWVuY2UgbWFwIGZvciBBZ2VudCBUaGlua2luZyAxMDE8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5BIGZvdXIgcXVhZHJhbnQgYXVkaWVuY2UgbWFwIHNob3dpbmcgaG93IEFnZW50IFRoaW5raW5nIGhlbHBzIHRlZW5hZ2VycywgYWR1bHRzLCBwYXJlbnRzLCB0ZWFjaGVycywgYW5kIHByb2R1Y3Rpdml0eSB0b29sIHVzZXJzLjwvZGVzYz4KICA8cmVjdCB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiNmOGZhZjkiLz4KICA8dGV4dCB4PSI3MDAiIHk9Ijc4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lkIzkuIDnp40gQWdlbnQg5oCd57u077yM5LiN5ZCM5Lq65pyJ5LiN5ZCM55So5rOVPC90ZXh0PgogIDx0ZXh0IHg9IjcwMCIgeT0iMTI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwsICdQaW5nRmFuZyBTQycsICdNaWNyb3NvZnQgWWFIZWknLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmaWxsPSIjNjU3MTdkIj7or77nqIvlrprkvY3kuI3lj6rlsZ7kuo7lsJHlhL/nvJbnqIvvvIzkuZ/kuI3lj6rlsZ7kuo7nqIvluo/lkZg8L3RleHQ+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTQiIHN0ZERldmlhdGlvbj0iMTgiIGZsb29kLWNvbG9yPSIjMTcyMTJiIiBmbG9vZC1vcGFjaXR5PSIwLjEyIi8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGcgZm9udC1mYW1pbHk9IkFyaWFsLCAnUGluZ0ZhbmcgU0MnLCAnTWljcm9zb2Z0IFlhSGVpJywgc2Fucy1zZXJpZiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZThmNGYyIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzFmN2E4YyI+5bCRPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7pnZLlsJHlubQ8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lgZrkuKrkurrkuLvpobXjgIHlsI/muLjmiI/jgIHmlYXkuovkuabjgIHlrabkuaDliqnmiYs8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiuWFtOi2o+WPmOaIkOS9nOWTgTwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6KGo6L6+5oOz5rOV44CB6L+t5Luj44CB5bGV56S6PC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzIwIDE5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZmZmMWRmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iI2E2NWYwMCI+5oiQPC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7miJDlubTkuro8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7lpITnkIYgRXhjZWzjgIHmiqXlkYrjgIHosIPnoJTjgIHml4XooYzjgIHlsI/lt6Xlhbc8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjQwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMyZjNiNDUiPuaguOW/g+S7t+WAvO+8muaKiumHjeWkjeW3peS9nOa1geeoi+WMljwvdGV4dD4KICAgICAgPHRleHQgeD0iNDAiIHk9IjIxMCIgZm9udC1zaXplPSIyMiIgZmlsbD0iIzJmM2I0NSI+6K6t57uD77ya6K6h5YiS44CB6aqM5pS244CB5rKJ5reAIHNraWxsPC90ZXh0PgogICAgPC9nPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIwIDQ5MCkiPgogICAgICA8cmVjdCB3aWR0aD0iNTYwIiBoZWlnaHQ9IjI1MCIgcng9IjI4IiBmaWxsPSIjZmZmZmZmIi8+CiAgICAgIDxjaXJjbGUgY3g9IjcwIiBjeT0iNzIiIHI9IjM0IiBmaWxsPSIjZWVmMGZmIi8+CiAgICAgIDx0ZXh0IHg9IjcwIiB5PSI4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0iIzU0NTJhMyI+5a62PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMjAiIHk9IjcwIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMTcyMTJiIj7lrrbplb8gLyDogIHluIg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iMTEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNTM2MDZjIj7nkIbop6MgQUkg5pWZ6IKy44CB6L6555WM44CB5a6J5YWo5ZKM5L2c5ZOB5a+85ZCRPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrkuI3mioogQUkg5b2T5Luj5YaZ5ZmoPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJrmj5Dpl67jgIHmo4Dmn6XjgIHotJ/otKPku7vkvb/nlKg8L3RleHQ+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MjAgNDkwKSI+CiAgICAgIDxyZWN0IHdpZHRoPSI1NjAiIGhlaWdodD0iMjUwIiByeD0iMjgiIGZpbGw9IiNmZmZmZmYiLz4KICAgICAgPGNpcmNsZSBjeD0iNzAiIGN5PSI3MiIgcj0iMzQiIGZpbGw9IiNmNGViZjgiLz4KICAgICAgPHRleHQgeD0iNzAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjN2E0YjhmIj7mlYg8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEyMCIgeT0iNzAiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IiMxNzIxMmIiPuaViOeOh+W3peWFt+eUqOaItzwvdGV4dD4KICAgICAgPHRleHQgeD0iMTIwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM1MzYwNmMiPkNvZGV444CBQUkgQ29kaW5nIEFnZW5044CBTUNQ44CB6Ieq5Yqo5YyWPC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMTcwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7moLjlv4Pku7flgLzvvJrorqkgQUkg6L+b5YWl55yf5a6e5bel5L2c546w5Zy6PC90ZXh0PgogICAgICA8dGV4dCB4PSI0MCIgeT0iMjEwIiBmb250LXNpemU9IjIyIiBmaWxsPSIjMmYzYjQ1Ij7orq3nu4PvvJror7vpobnnm67jgIHmlLnmlofku7bjgIHot5Hpqozor4E8L3RleHQ+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"};
+</script>
+<script>
+const docs = [
+  {
+    id: "course",
+    title: "详细教程正文",
+    kind: "Course",
+    description: "10 章正文，适合阅读和继续修改。",
+    path: "../docs/agent-thinking-course.md",
+  },
+  {
+    id: "outline",
+    title: "课程大纲",
+    kind: "Structure",
+    description: "课程定位、章节安排和试讲设计。",
+    path: "../docs/agent-thinking-course-outline.md",
+  },
+  {
+    id: "instructor",
+    title: "讲师手册",
+    kind: "Teaching",
+    description: "每节课怎么讲，怎么带学员动手。",
+    path: "../docs/agent-thinking-instructor-guide.md",
+  },
+  {
+    id: "workbook",
+    title: "学习者练习册",
+    kind: "Workbook",
+    description: "课堂作业、复盘和最终项目模板。",
+    path: "../docs/agent-thinking-workbook.md",
+  },
+  {
+    id: "prompts",
+    title: "Prompt / Skill 模板库",
+    kind: "Templates",
+    description: "24 个可以直接试用和改写的模板。",
+    path: "../docs/agent-thinking-prompt-library.md",
+  },
+  {
+    id: "abstract",
+    title: "对外摘要版",
+    kind: "Pitch",
+    description: "发给朋友或内测学员的短版本。",
+    path: "../docs/agent-thinking-abstract.md",
+  },
+  {
+    id: "marketing",
+    title: "传播包",
+    kind: "Marketing",
+    description: "小红书、朋友圈和体验课招募文字。",
+    path: "../docs/agent-thinking-marketing-pack.md",
+  },
+  {
+    id: "research",
+    title: "调研说明",
+    kind: "Research",
+    description: "查过的公开课程和 AI literacy 资料。",
+    path: "../docs/agent-thinking-research-notes.md",
+  },
+  {
+    id: "visual",
+    title: "视觉资产说明",
+    kind: "Assets",
+    description: "现有 SVG 和后续配图提示词。",
+    path: "../docs/agent-thinking-visual-assets.md",
+  },
+];
+
+const state = {
+  activeDoc: docs[0],
+  cache: new Map(),
+  currentMarkdown: "",
+  currentHeadings: [],
+};
+
+const els = {
+  docList: document.querySelector("#docList"),
+  currentKind: document.querySelector("#currentKind"),
+  currentTitle: document.querySelector("#currentTitle"),
+  docContent: document.querySelector("#docContent"),
+  toc: document.querySelector("#toc"),
+  searchInput: document.querySelector("#searchInput"),
+  chapterGrid: document.querySelector("#chapterGrid"),
+  tabs: document.querySelectorAll(".tab"),
+  views: {
+    reader: document.querySelector("#readerView"),
+    chapters: document.querySelector("#chaptersView"),
+    assets: document.querySelector("#assetsView"),
+  },
+};
+
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function slugify(text, index) {
+  const slug = text
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-|-$/g, "");
+  return slug || `section-${index}`;
+}
+
+function normalizeUrl(url) {
+  const embeddedAssets = window.__EMBEDDED_ASSETS__ || {};
+  if (embeddedAssets[url]) return embeddedAssets[url];
+  if (url.startsWith("assets/") && embeddedAssets[`/docs/${url}`]) return embeddedAssets[`/docs/${url}`];
+  if (url.startsWith("/docs/assets/") && embeddedAssets[url]) return embeddedAssets[url];
+  if (/^(https?:|mailto:|#|data:)/.test(url)) return url;
+  if (url.startsWith("/docs/")) return `..${url}`;
+  if (url.startsWith("docs/")) return `../${url}`;
+  if (url.startsWith("assets/")) return `../docs/${url}`;
+  return url;
+}
+
+function inlineMarkdown(text) {
+  let html = escapeHtml(text);
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, url) => {
+    return `<img src="${normalizeUrl(url)}" alt="${alt}">`;
+  });
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => {
+    return `<a href="${normalizeUrl(url)}" target="_blank" rel="noreferrer">${label}</a>`;
+  });
+  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+  return html;
+}
+
+function parseMarkdown(markdown, query = "") {
+  const lines = markdown.split(/\r?\n/);
+  const html = [];
+  const headings = [];
+  let inCode = false;
+  let codeLines = [];
+  let inList = false;
+  let inOrderedList = false;
+  let paragraph = [];
+  let headingIndex = 0;
+
+  function flushParagraph() {
+    if (!paragraph.length) return;
+    html.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`);
+    paragraph = [];
+  }
+
+  function closeLists() {
+    if (inList) {
+      html.push("</ul>");
+      inList = false;
+    }
+    if (inOrderedList) {
+      html.push("</ol>");
+      inOrderedList = false;
+    }
+  }
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\s+$/, "");
+
+    if (line.startsWith("```")) {
+      if (inCode) {
+        html.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+        codeLines = [];
+        inCode = false;
+      } else {
+        flushParagraph();
+        closeLists();
+        inCode = true;
+      }
+      continue;
+    }
+
+    if (inCode) {
+      codeLines.push(rawLine);
+      continue;
+    }
+
+    const headingMatch = line.match(/^(#{1,3})\s+(.+)$/);
+    if (headingMatch) {
+      flushParagraph();
+      closeLists();
+      const level = headingMatch[1].length;
+      const title = headingMatch[2].trim();
+      const id = slugify(title, headingIndex++);
+      headings.push({ level, title, id });
+      html.push(`<h${level} id="${id}">${inlineMarkdown(title)}</h${level}>`);
+      continue;
+    }
+
+    if (!line.trim()) {
+      flushParagraph();
+      closeLists();
+      continue;
+    }
+
+    if (line.startsWith("> ")) {
+      flushParagraph();
+      closeLists();
+      html.push(`<blockquote>${inlineMarkdown(line.slice(2))}</blockquote>`);
+      continue;
+    }
+
+    const unorderedMatch = line.match(/^\s*[-*]\s+(.+)$/);
+    if (unorderedMatch) {
+      flushParagraph();
+      if (inOrderedList) {
+        html.push("</ol>");
+        inOrderedList = false;
+      }
+      if (!inList) {
+        html.push("<ul>");
+        inList = true;
+      }
+      html.push(`<li>${inlineMarkdown(unorderedMatch[1])}</li>`);
+      continue;
+    }
+
+    const orderedMatch = line.match(/^\s*\d+\.\s+(.+)$/);
+    if (orderedMatch) {
+      flushParagraph();
+      if (inList) {
+        html.push("</ul>");
+        inList = false;
+      }
+      if (!inOrderedList) {
+        html.push("<ol>");
+        inOrderedList = true;
+      }
+      html.push(`<li>${inlineMarkdown(orderedMatch[1])}</li>`);
+      continue;
+    }
+
+    paragraph.push(line);
+  }
+
+  flushParagraph();
+  closeLists();
+
+  let output = html.join("\n");
+  if (query.trim()) {
+    const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\<script src="./app.js"></script>");
+    output = output.replace(new RegExp(`(${escaped})`, "gi"), "<mark>$1</mark>");
+  }
+
+  return { html: output, headings };
+}
+
+async function getMarkdown(doc) {
+  const embeddedDocs = window.__EMBEDDED_DOCS__ || {};
+  if (embeddedDocs[doc.id]) {
+    return embeddedDocs[doc.id];
+  }
+  if (state.cache.has(doc.id)) return state.cache.get(doc.id);
+  if (window.location.protocol === "file:") {
+    throw new Error(
+      "浏览器不允许 file:// 页面读取 docs/*.md。请打开 site/standalone.html，或在项目根目录运行 bash site/start.sh 后访问 http://127.0.0.1:4173/site/。",
+    );
+  }
+  const response = await fetch(doc.path);
+  if (!response.ok) {
+    throw new Error(`无法读取 ${doc.path}`);
+  }
+  const markdown = await response.text();
+  state.cache.set(doc.id, markdown);
+  return markdown;
+}
+
+function renderDocList() {
+  els.docList.innerHTML = docs
+    .map(
+      (doc) => `
+        <button class="doc-button ${doc.id === state.activeDoc.id ? "active" : ""}" data-doc="${doc.id}">
+          <strong>${doc.title}</strong>
+          <span>${doc.description}</span>
+        </button>
+      `,
+    )
+    .join("");
+
+  els.docList.querySelectorAll(".doc-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const doc = docs.find((item) => item.id === button.dataset.doc);
+      setActiveDoc(doc);
+    });
+  });
+}
+
+function renderToc(headings) {
+  const visible = headings.filter((heading) => heading.level >= 1 && heading.level <= 3);
+  els.toc.innerHTML = visible.length
+    ? visible
+        .map(
+          (heading) =>
+            `<a class="toc-link level-${heading.level}" href="#${heading.id}">${escapeHtml(heading.title)}</a>`,
+        )
+        .join("")
+    : "<p>当前文档没有可提取的章节。</p>";
+}
+
+async function setActiveDoc(doc) {
+  state.activeDoc = doc;
+  els.searchInput.value = "";
+  renderDocList();
+  els.currentKind.textContent = doc.kind;
+  els.currentTitle.textContent = doc.title;
+  els.docContent.innerHTML = "<p>正在读取文档...</p>";
+
+  try {
+    state.currentMarkdown = await getMarkdown(doc);
+    const parsed = parseMarkdown(state.currentMarkdown);
+    state.currentHeadings = parsed.headings;
+    els.docContent.innerHTML = parsed.html;
+    renderToc(parsed.headings);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (error) {
+    els.docContent.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
+    els.toc.innerHTML = "";
+  }
+}
+
+function renderChapters() {
+  getMarkdown(docs[0]).then((markdown) => {
+    const { headings } = parseMarkdown(markdown);
+    const chapters = headings
+      .filter((heading) => heading.level === 2 && /^第.+章/.test(heading.title))
+      .map((heading, index) => {
+        const start = markdown.indexOf(`## ${heading.title}`);
+        const next = headings
+          .filter((item) => item.level === 2)
+          .map((item) => markdown.indexOf(`## ${item.title}`))
+          .find((position) => position > start);
+        const slice = markdown.slice(start, next > -1 ? next : undefined);
+        const firstParagraph = slice
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .find((line) => line && !line.startsWith("#"));
+        return { ...heading, index: index + 1, summary: firstParagraph || "课程章节" };
+      });
+
+    els.chapterGrid.innerHTML = chapters
+      .map(
+        (chapter) => `
+          <article class="chapter-card">
+            <span>Chapter ${String(chapter.index).padStart(2, "0")}</span>
+            <h4>${escapeHtml(chapter.title)}</h4>
+            <p>${inlineMarkdown(chapter.summary)}</p>
+          </article>
+        `,
+      )
+      .join("");
+  }).catch((error) => {
+    els.chapterGrid.innerHTML = `<article class="chapter-card"><h4>无法读取章节</h4><p>${escapeHtml(error.message)}</p></article>`;
+  });
+}
+
+function setupTabs() {
+  els.tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      els.tabs.forEach((item) => item.classList.remove("active"));
+      tab.classList.add("active");
+      Object.values(els.views).forEach((view) => view.classList.remove("active"));
+      els.views[tab.dataset.view].classList.add("active");
+    });
+  });
+}
+
+function setupSearch() {
+  els.searchInput.addEventListener("input", () => {
+    const parsed = parseMarkdown(state.currentMarkdown, els.searchInput.value);
+    els.docContent.innerHTML = parsed.html;
+    renderToc(parsed.headings);
+  });
+}
+
+renderDocList();
+renderChapters();
+setupTabs();
+setupSearch();
+setActiveDoc(state.activeDoc);
+
+</script>
+  </body>
+</html>

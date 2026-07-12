@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Audience map for Agent Thinking 101</title>
+  <desc id="desc">A four quadrant audience map showing how Agent Thinking helps teenagers, adults, parents, teachers, and productivity tool users.</desc>
+  <rect width="1400" height="900" fill="#f8faf9"/>
+  <text x="700" y="78" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="52" font-weight="800" fill="#17212b">同一种 Agent 思维，不同人有不同用法</text>
+  <text x="700" y="126" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" fill="#65717d">课程定位不只属于少儿编程，也不只属于程序员</text>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#17212b" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <g font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" filter="url(#shadow)">
+    <g transform="translate(120 190)">
+      <rect width="560" height="250" rx="28" fill="#ffffff"/>
+      <circle cx="70" cy="72" r="34" fill="#e8f4f2"/>
+      <text x="70" y="82" text-anchor="middle" font-size="30" font-weight="800" fill="#1f7a8c">少</text>
+      <text x="120" y="70" font-size="30" font-weight="800" fill="#17212b">青少年</text>
+      <text x="120" y="110" font-size="22" fill="#53606c">做个人主页、小游戏、故事书、学习助手</text>
+      <text x="40" y="170" font-size="22" fill="#2f3b45">核心价值：把兴趣变成作品</text>
+      <text x="40" y="210" font-size="22" fill="#2f3b45">训练：表达想法、迭代、展示</text>
+    </g>
+    <g transform="translate(720 190)">
+      <rect width="560" height="250" rx="28" fill="#ffffff"/>
+      <circle cx="70" cy="72" r="34" fill="#fff1df"/>
+      <text x="70" y="82" text-anchor="middle" font-size="30" font-weight="800" fill="#a65f00">成</text>
+      <text x="120" y="70" font-size="30" font-weight="800" fill="#17212b">成年人</text>
+      <text x="120" y="110" font-size="22" fill="#53606c">处理 Excel、报告、调研、旅行、小工具</text>
+      <text x="40" y="170" font-size="22" fill="#2f3b45">核心价值：把重复工作流程化</text>
+      <text x="40" y="210" font-size="22" fill="#2f3b45">训练：计划、验收、沉淀 skill</text>
+    </g>
+    <g transform="translate(120 490)">
+      <rect width="560" height="250" rx="28" fill="#ffffff"/>
+      <circle cx="70" cy="72" r="34" fill="#eef0ff"/>
+      <text x="70" y="82" text-anchor="middle" font-size="30" font-weight="800" fill="#5452a3">家</text>
+      <text x="120" y="70" font-size="30" font-weight="800" fill="#17212b">家长 / 老师</text>
+      <text x="120" y="110" font-size="22" fill="#53606c">理解 AI 教育、边界、安全和作品导向</text>
+      <text x="40" y="170" font-size="22" fill="#2f3b45">核心价值：不把 AI 当代写器</text>
+      <text x="40" y="210" font-size="22" fill="#2f3b45">训练：提问、检查、负责任使用</text>
+    </g>
+    <g transform="translate(720 490)">
+      <rect width="560" height="250" rx="28" fill="#ffffff"/>
+      <circle cx="70" cy="72" r="34" fill="#f4ebf8"/>
+      <text x="70" y="82" text-anchor="middle" font-size="30" font-weight="800" fill="#7a4b8f">效</text>
+      <text x="120" y="70" font-size="30" font-weight="800" fill="#17212b">效率工具用户</text>
+      <text x="120" y="110" font-size="22" fill="#53606c">Codex、AI Coding Agent、MCP、自动化</text>
+      <text x="40" y="170" font-size="22" fill="#2f3b45">核心价值：让 AI 进入真实工作现场</text>
+      <text x="40" y="210" font-size="22" fill="#2f3b45">训练：读项目、改文件、跑验证</text>
+    </g>
+  </g>
+</svg>

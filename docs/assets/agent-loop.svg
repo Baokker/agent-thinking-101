@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Agent collaboration loop</title>
+  <desc id="desc">A loop diagram for Agent thinking: goal, context, plan, tools, feedback, check, and memory.</desc>
+  <rect width="1400" height="900" fill="#fbfaf7"/>
+  <text x="700" y="80" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="52" font-weight="800" fill="#17212b">Agent 协作循环</text>
+  <text x="700" y="126" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" fill="#65717d">目标 → 上下文 → 计划 → 工具 → 反馈 → 检查 → 记忆</text>
+  <defs>
+    <marker id="arrow" markerWidth="16" markerHeight="16" refX="12" refY="8" orient="auto">
+      <path d="M2,2 L14,8 L2,14 Z" fill="#2c6e7f"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#17212b" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+  <g fill="none" stroke="#2c6e7f" stroke-width="7" marker-end="url(#arrow)">
+    <path d="M700 205 C930 205 1100 350 1100 520"/>
+    <path d="M1085 560 C1050 735 880 805 700 805"/>
+    <path d="M650 805 C420 805 260 660 260 520"/>
+    <path d="M260 480 C260 315 430 205 650 205"/>
+  </g>
+  <g filter="url(#shadow)" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+    <g transform="translate(575 170)">
+      <rect width="250" height="120" rx="24" fill="#ffffff"/>
+      <text x="125" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">1. 目标</text>
+      <text x="125" y="88" text-anchor="middle" font-size="18" fill="#63707c">我要完成什么</text>
+    </g>
+    <g transform="translate(940 365)">
+      <rect width="260" height="120" rx="24" fill="#ffffff"/>
+      <text x="130" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">2. 上下文</text>
+      <text x="130" y="88" text-anchor="middle" font-size="18" fill="#63707c">材料、偏好、限制</text>
+    </g>
+    <g transform="translate(900 620)">
+      <rect width="260" height="120" rx="24" fill="#ffffff"/>
+      <text x="130" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">3. 计划</text>
+      <text x="130" y="88" text-anchor="middle" font-size="18" fill="#63707c">先拆步骤再执行</text>
+    </g>
+    <g transform="translate(570 710)">
+      <rect width="260" height="120" rx="24" fill="#ffffff"/>
+      <text x="130" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">4. 工具</text>
+      <text x="130" y="88" text-anchor="middle" font-size="18" fill="#63707c">文件、代码、表格</text>
+    </g>
+    <g transform="translate(240 620)">
+      <rect width="260" height="120" rx="24" fill="#ffffff"/>
+      <text x="130" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">5. 反馈</text>
+      <text x="130" y="88" text-anchor="middle" font-size="18" fill="#63707c">看结果，继续改</text>
+    </g>
+    <g transform="translate(200 365)">
+      <rect width="260" height="120" rx="24" fill="#ffffff"/>
+      <text x="130" y="54" text-anchor="middle" font-size="28" font-weight="700" fill="#17212b">6. 检查</text>
+      <text x="130" y="88" text-anchor="middle" font-size="18" fill="#63707c">人来验收和负责</text>
+    </g>
+  </g>
+  <g transform="translate(525 395)">
+    <rect width="350" height="160" rx="32" fill="#eaf5f3" stroke="#2c6e7f" stroke-width="3"/>
+    <text x="175" y="70" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="32" font-weight="800" fill="#1f5967">沉淀成记忆 / skill</text>
+    <text x="175" y="110" text-anchor="middle" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" fill="#355b64">把一次经验变成下次可复用的流程</text>
+  </g>
+</svg>
