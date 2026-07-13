@@ -1,66 +1,21 @@
 const docs = [
   {
     id: "course",
-    title: "详细教程正文",
-    kind: "Course",
-    description: "10 章正文，适合阅读和继续修改。",
+    title: "完整手册",
+    kind: "Handbook",
     path: "../docs/agent-thinking-course.md",
   },
   {
-    id: "outline",
-    title: "课程大纲",
-    kind: "Structure",
-    description: "课程定位、章节安排和试讲设计。",
-    path: "../docs/agent-thinking-course-outline.md",
-  },
-  {
-    id: "instructor",
-    title: "讲师手册",
-    kind: "Teaching",
-    description: "每节课怎么讲，怎么带学员动手。",
-    path: "../docs/agent-thinking-instructor-guide.md",
-  },
-  {
-    id: "workbook",
-    title: "学习者练习册",
-    kind: "Workbook",
-    description: "课堂作业、复盘和最终项目模板。",
-    path: "../docs/agent-thinking-workbook.md",
-  },
-  {
-    id: "prompts",
-    title: "Prompt / Skill 模板库",
-    kind: "Templates",
-    description: "24 个可以直接试用和改写的模板。",
-    path: "../docs/agent-thinking-prompt-library.md",
-  },
-  {
     id: "abstract",
-    title: "对外摘要版",
-    kind: "Pitch",
-    description: "发给朋友或内测学员的短版本。",
+    title: "快速摘要",
+    kind: "Overview",
     path: "../docs/agent-thinking-abstract.md",
   },
   {
-    id: "marketing",
-    title: "传播包",
-    kind: "Marketing",
-    description: "小红书、朋友圈和体验课招募文字。",
-    path: "../docs/agent-thinking-marketing-pack.md",
-  },
-  {
-    id: "research",
-    title: "调研说明",
-    kind: "Research",
-    description: "查过的公开课程和 AI literacy 资料。",
-    path: "../docs/agent-thinking-research-notes.md",
-  },
-  {
-    id: "visual",
-    title: "视觉资产说明",
-    kind: "Assets",
-    description: "现有 SVG 和后续配图提示词。",
-    path: "../docs/agent-thinking-visual-assets.md",
+    id: "prompts",
+    title: "Prompt / Skill 模板",
+    kind: "Templates",
+    path: "../docs/agent-thinking-prompt-library.md",
   },
 ];
 
@@ -72,7 +27,7 @@ const state = {
 };
 
 const els = {
-  sidePanel: document.querySelector(".side-panel"),
+  siteHeader: document.querySelector(".site-header"),
   navToggle: document.querySelector("#navToggle"),
   docList: document.querySelector("#docList"),
   currentKind: document.querySelector("#currentKind"),
@@ -80,17 +35,10 @@ const els = {
   docContent: document.querySelector("#docContent"),
   toc: document.querySelector("#toc"),
   searchInput: document.querySelector("#searchInput"),
-  chapterGrid: document.querySelector("#chapterGrid"),
-  tabs: document.querySelectorAll(".tab"),
-  views: {
-    reader: document.querySelector("#readerView"),
-    chapters: document.querySelector("#chaptersView"),
-    assets: document.querySelector("#assetsView"),
-  },
 };
 
 function setNavigationOpen(isOpen) {
-  els.sidePanel.classList.toggle("nav-open", isOpen);
+  els.siteHeader.classList.toggle("nav-open", isOpen);
   els.navToggle.setAttribute("aria-expanded", String(isOpen));
   els.navToggle.setAttribute("aria-label", isOpen ? "收起文档导航" : "展开文档导航");
 }
@@ -283,7 +231,6 @@ function renderDocList() {
       (doc) => `
         <button class="doc-button ${doc.id === state.activeDoc.id ? "active" : ""}" data-doc="${doc.id}">
           <strong>${doc.title}</strong>
-          <span>${doc.description}</span>
         </button>
       `,
     )
@@ -331,52 +278,6 @@ async function setActiveDoc(doc) {
   }
 }
 
-function renderChapters() {
-  getMarkdown(docs[0]).then((markdown) => {
-    const { headings } = parseMarkdown(markdown);
-    const chapters = headings
-      .filter((heading) => heading.level === 2 && /^第.+章/.test(heading.title))
-      .map((heading, index) => {
-        const start = markdown.indexOf(`## ${heading.title}`);
-        const next = headings
-          .filter((item) => item.level === 2)
-          .map((item) => markdown.indexOf(`## ${item.title}`))
-          .find((position) => position > start);
-        const slice = markdown.slice(start, next > -1 ? next : undefined);
-        const firstParagraph = slice
-          .split(/\r?\n/)
-          .map((line) => line.trim())
-          .find((line) => line && !line.startsWith("#"));
-        return { ...heading, index: index + 1, summary: firstParagraph || "课程章节" };
-      });
-
-    els.chapterGrid.innerHTML = chapters
-      .map(
-        (chapter) => `
-          <article class="chapter-card">
-            <span>Chapter ${String(chapter.index).padStart(2, "0")}</span>
-            <h4>${escapeHtml(chapter.title)}</h4>
-            <p>${inlineMarkdown(chapter.summary)}</p>
-          </article>
-        `,
-      )
-      .join("");
-  }).catch((error) => {
-    els.chapterGrid.innerHTML = `<article class="chapter-card"><h4>无法读取章节</h4><p>${escapeHtml(error.message)}</p></article>`;
-  });
-}
-
-function setupTabs() {
-  els.tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      els.tabs.forEach((item) => item.classList.remove("active"));
-      tab.classList.add("active");
-      Object.values(els.views).forEach((view) => view.classList.remove("active"));
-      els.views[tab.dataset.view].classList.add("active");
-    });
-  });
-}
-
 function setupSearch() {
   els.searchInput.addEventListener("input", () => {
     const parsed = parseMarkdown(state.currentMarkdown, els.searchInput.value);
@@ -387,7 +288,7 @@ function setupSearch() {
 
 function setupNavigation() {
   els.navToggle.addEventListener("click", () => {
-    setNavigationOpen(!els.sidePanel.classList.contains("nav-open"));
+    setNavigationOpen(!els.siteHeader.classList.contains("nav-open"));
   });
 
   document.addEventListener("keydown", (event) => {
@@ -395,13 +296,11 @@ function setupNavigation() {
   });
 
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 1200) setNavigationOpen(false);
+    if (window.innerWidth > 860) setNavigationOpen(false);
   });
 }
 
 renderDocList();
-renderChapters();
-setupTabs();
 setupSearch();
 setupNavigation();
 setActiveDoc(state.activeDoc);

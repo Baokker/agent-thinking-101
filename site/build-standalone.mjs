@@ -6,14 +6,8 @@ const siteDir = resolve(root, "site");
 
 const docs = [
   ["course", "docs/agent-thinking-course.md"],
-  ["outline", "docs/agent-thinking-course-outline.md"],
-  ["instructor", "docs/agent-thinking-instructor-guide.md"],
-  ["workbook", "docs/agent-thinking-workbook.md"],
-  ["prompts", "docs/agent-thinking-prompt-library.md"],
   ["abstract", "docs/agent-thinking-abstract.md"],
-  ["marketing", "docs/agent-thinking-marketing-pack.md"],
-  ["research", "docs/agent-thinking-research-notes.md"],
-  ["visual", "docs/agent-thinking-visual-assets.md"],
+  ["prompts", "docs/agent-thinking-prompt-library.md"],
 ];
 
 const assets = [

@@ -3,19 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Agent Thinking 101 | 课程文档原型</title>
+    <title>Agent Thinking 101 | Handbook</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
-      <aside class="side-panel" aria-label="课程文档导航">
-        <div class="brand-block">
-          <div class="brand-mark">AT</div>
-          <div class="brand-copy">
-            <p class="eyebrow">Teaching Agent</p>
-            <h1>Agent Thinking 101</h1>
+      <header class="site-header" aria-label="Handbook 导航">
+        <div class="header-inner">
+          <div class="brand-block">
+            <div class="brand-mark">AT</div>
+            <div class="brand-copy">
+              <h1>Agent Thinking 101</h1>
+              <p>和 AI Agent 一起做事</p>
+            </div>
           </div>
+
+          <nav class="doc-list" id="docList" aria-label="文档列表"></nav>
           <button
             class="nav-toggle"
             id="navToggle"
@@ -29,52 +33,10 @@
             <span></span>
           </button>
         </div>
-
-        <nav class="doc-list" id="docList" aria-label="文档列表"></nav>
-
-        <div class="side-note">
-          <p>本原型直接读取 <code>docs/*.md</code>，后续改 Markdown 后刷新页面即可查看。</p>
-        </div>
-      </aside>
+      </header>
 
       <main class="main-panel">
-        <header class="hero">
-          <div class="hero-copy">
-            <p class="eyebrow">Agent Thinking 101</p>
-            <h2>课程写到哪里、各章怎么安排，都在这里。</h2>
-            <p class="hero-text">
-              可以读主教程，也可以切到讲师手册、练习册和传播文案。Markdown 改完后刷新页面就会更新。
-            </p>
-          </div>
-          <img src="../docs/assets/agent-thinking-hero.svg" alt="Agent Thinking 101 课程主视觉" />
-        </header>
-
-        <section class="overview-grid" aria-label="课程总览">
-          <article>
-            <span>10</span>
-            <p>主课程章节</p>
-          </article>
-          <article>
-            <span>24</span>
-            <p>Prompt / Skill 模板</p>
-          </article>
-          <article>
-            <span>4</span>
-            <p>体验课版本</p>
-          </article>
-          <article>
-            <span>3</span>
-            <p>视觉信息图</p>
-          </article>
-        </section>
-
-        <section class="tabs" aria-label="内容视图切换">
-          <button class="tab active" data-view="reader">文档阅读</button>
-          <button class="tab" data-view="chapters">课程章节</button>
-          <button class="tab" data-view="assets">视觉资产</button>
-        </section>
-
-        <section class="content-layout active" id="readerView">
+        <section class="content-layout">
           <article class="reader-card">
             <div class="reader-toolbar">
               <div>
@@ -93,37 +55,6 @@
             <p class="eyebrow">章节目录</p>
             <div id="toc"></div>
           </aside>
-        </section>
-
-        <section class="chapter-board" id="chaptersView">
-          <div class="section-head">
-            <p class="eyebrow">Course Map</p>
-            <h3>十章课程主线</h3>
-            <p>这部分从主教程正文中自动抽取一级课程章节，适合快速看课程骨架。</p>
-          </div>
-          <div class="chapter-grid" id="chapterGrid"></div>
-        </section>
-
-        <section class="asset-board" id="assetsView">
-          <div class="section-head">
-            <p class="eyebrow">Visual System</p>
-            <h3>课程视觉资产</h3>
-            <p>这些图可以用于课程介绍页、试讲投影、Notion 文档或小红书封面草稿。</p>
-          </div>
-          <div class="asset-grid">
-            <figure>
-              <img src="../docs/assets/agent-thinking-hero.svg" alt="课程主视觉" />
-              <figcaption>课程主视觉：从聊天到做事</figcaption>
-            </figure>
-            <figure>
-              <img src="../docs/assets/agent-loop.svg" alt="Agent 协作循环" />
-              <figcaption>Agent 协作循环：目标、工具、反馈、检查</figcaption>
-            </figure>
-            <figure>
-              <img src="../docs/assets/audience-map.svg" alt="适合人群地图" />
-              <figcaption>适合人群地图：青少年、成年人、家长老师、效率工具用户</figcaption>
-            </figure>
-          </div>
         </section>
       </main>
     </div>
