@@ -67,6 +67,10 @@ input {
   margin-bottom: 26px;
 }
 
+.brand-copy {
+  min-width: 0;
+}
+
 .brand-mark {
   width: 54px;
   height: 54px;
@@ -77,6 +81,38 @@ input {
   color: #fff;
   font-weight: 800;
   letter-spacing: 0;
+}
+
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 11px 10px;
+  border: 1px solid rgba(23, 33, 43, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  margin: 4px 0;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .eyebrow {
@@ -270,6 +306,12 @@ h1 {
   box-shadow: 0 14px 40px rgba(19, 33, 43, 0.08);
 }
 
+.reader-card,
+.reader-toolbar > *,
+.search-box {
+  min-width: 0;
+}
+
 .reader-toolbar {
   position: sticky;
   top: 0;
@@ -307,8 +349,10 @@ h1 {
 }
 
 .doc-content {
+  min-width: 0;
   padding: 26px;
   line-height: 1.78;
+  overflow-wrap: anywhere;
 }
 
 .doc-content h1,
@@ -351,7 +395,8 @@ h1 {
 }
 
 .doc-content pre {
-  overflow: auto;
+  max-width: 100%;
+  overflow-x: auto;
   padding: 16px;
   border: 1px solid rgba(23, 33, 43, 0.12);
   border-radius: 8px;
@@ -480,6 +525,8 @@ h1 {
 }
 
 .asset-grid img {
+  max-width: 100%;
+  height: auto;
   width: 100%;
   display: block;
   border-radius: 8px;
@@ -490,51 +537,229 @@ h1 {
   color: var(--muted);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1200px) {
   .app-shell {
     grid-template-columns: 1fr;
   }
 
   .side-panel {
-    position: relative;
+    position: sticky;
+    z-index: 20;
+    top: 0;
     height: auto;
+    padding: 14px 24px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(23, 33, 43, 0.12);
+    overflow: visible;
+  }
+
+  .brand-block {
+    grid-template-columns: 46px minmax(0, 1fr) 44px;
+    margin-bottom: 0;
+  }
+
+  .brand-mark {
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand-block h1 {
+    font-size: 19px;
+  }
+
+  .brand-block .eyebrow {
+    margin-bottom: 4px;
+  }
+
+  .nav-toggle {
+    display: block;
   }
 
   .doc-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-height: calc(100vh - 90px);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(23, 33, 43, 0.1);
+    overflow-y: auto;
+  }
+
+  .side-panel.nav-open .doc-list {
+    display: grid;
+  }
+
+  .side-note {
+    display: none;
+  }
+
+  .reader-toolbar {
+    position: static;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-panel {
+    padding: 24px;
   }
 
   .hero,
   .content-layout.active,
   .reader-toolbar {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .toc-card {
-    position: relative;
-    top: auto;
-    max-height: none;
+    display: none;
   }
 }
 
 @media (max-width: 720px) {
-  .main-panel,
   .side-panel {
+    padding: 12px 16px;
+  }
+
+  .main-panel {
     padding: 16px;
   }
 
-  .hero {
-    padding: 20px;
+  .brand-block {
+    grid-template-columns: 42px minmax(0, 1fr) 44px;
+    gap: 10px;
   }
 
-  .overview-grid,
-  .chapter-grid,
+  .brand-mark {
+    width: 42px;
+    height: 42px;
+  }
+
+  .brand-block h1 {
+    font-size: 17px;
+  }
+
+  .brand-block .eyebrow {
+    display: none;
+  }
+
   .doc-list {
     grid-template-columns: 1fr;
   }
 
+  .hero {
+    min-height: 0;
+    gap: 20px;
+    padding: 18px;
+  }
+
+  .hero h2 {
+    font-size: 32px;
+    line-height: 1.12;
+  }
+
+  .hero-text {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .overview-grid article {
+    min-height: 96px;
+    padding: 14px;
+  }
+
+  .overview-grid span {
+    font-size: 30px;
+  }
+
+  .overview-grid p {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  .chapter-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
   .tabs {
+    margin-right: -16px;
+    padding-right: 16px;
     overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+  }
+
+  .reader-toolbar,
+  .doc-content,
+  .section-head,
+  .asset-grid {
+    padding: 18px;
+  }
+
+  .reader-toolbar h3 {
+    font-size: 22px;
+  }
+
+  .doc-content h1 {
+    font-size: 32px;
+  }
+
+  .doc-content h2 {
+    margin-top: 28px;
+    font-size: 25px;
+  }
+
+  .doc-content h3 {
+    font-size: 19px;
+  }
+
+  .doc-content p,
+  .doc-content li {
+    font-size: 15px;
+  }
+
+  .doc-content ul,
+  .doc-content ol {
+    padding-left: 22px;
+  }
+
+  .doc-content blockquote {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .section-head h3 {
+    font-size: 28px;
+  }
+
+  .chapter-card {
+    min-height: 0;
+  }
+
+  .asset-grid figure {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-block h1 {
+    font-size: 15px;
+  }
+
+  .hero h2 {
+    font-size: 28px;
   }
 }
 
@@ -545,10 +770,22 @@ h1 {
       <aside class="side-panel" aria-label="课程文档导航">
         <div class="brand-block">
           <div class="brand-mark">AT</div>
-          <div>
+          <div class="brand-copy">
             <p class="eyebrow">Teaching Agent</p>
             <h1>Agent Thinking 101</h1>
           </div>
+          <button
+            class="nav-toggle"
+            id="navToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="docList"
+            aria-label="展开文档导航"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
 
         <nav class="doc-list" id="docList" aria-label="文档列表"></nav>
@@ -728,6 +965,8 @@ const state = {
 };
 
 const els = {
+  sidePanel: document.querySelector(".side-panel"),
+  navToggle: document.querySelector("#navToggle"),
   docList: document.querySelector("#docList"),
   currentKind: document.querySelector("#currentKind"),
   currentTitle: document.querySelector("#currentTitle"),
@@ -742,6 +981,12 @@ const els = {
     assets: document.querySelector("#assetsView"),
   },
 };
+
+function setNavigationOpen(isOpen) {
+  els.sidePanel.classList.toggle("nav-open", isOpen);
+  els.navToggle.setAttribute("aria-expanded", String(isOpen));
+  els.navToggle.setAttribute("aria-label", isOpen ? "收起文档导航" : "展开文档导航");
+}
 
 function escapeHtml(value) {
   return value
@@ -898,7 +1143,7 @@ function parseMarkdown(markdown, query = "") {
 
   let output = html.join("\n");
   if (query.trim()) {
-    const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\<script src="./app.js"></script>");
+    const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     output = output.replace(new RegExp(`(${escaped})`, "gi"), "<mark>$1</mark>");
   }
 
@@ -940,6 +1185,7 @@ function renderDocList() {
   els.docList.querySelectorAll(".doc-button").forEach((button) => {
     button.addEventListener("click", () => {
       const doc = docs.find((item) => item.id === button.dataset.doc);
+      setNavigationOpen(false);
       setActiveDoc(doc);
     });
   });
@@ -1032,10 +1278,25 @@ function setupSearch() {
   });
 }
 
+function setupNavigation() {
+  els.navToggle.addEventListener("click", () => {
+    setNavigationOpen(!els.sidePanel.classList.contains("nav-open"));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setNavigationOpen(false);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1200) setNavigationOpen(false);
+  });
+}
+
 renderDocList();
 renderChapters();
 setupTabs();
 setupSearch();
+setupNavigation();
 setActiveDoc(state.activeDoc);
 
 </script>

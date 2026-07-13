@@ -60,7 +60,7 @@ html = html
   .replaceAll('/docs/assets/audience-map.svg', embeddedAssets["/docs/assets/audience-map.svg"])
   .replace(
     '<script src="./app.js"></script>',
-    `<script>\nwindow.__EMBEDDED_DOCS__ = ${JSON.stringify(embeddedDocs)};\nwindow.__EMBEDDED_ASSETS__ = ${JSON.stringify(embeddedAssets)};\n</script>\n<script>\n${js}\n</script>`,
+    () => `<script>\nwindow.__EMBEDDED_DOCS__ = ${JSON.stringify(embeddedDocs)};\nwindow.__EMBEDDED_ASSETS__ = ${JSON.stringify(embeddedAssets)};\n</script>\n<script>\n${js}\n</script>`,
   );
 
 writeFileSync(resolve(siteDir, "standalone.html"), html);

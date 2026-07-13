@@ -72,6 +72,8 @@ const state = {
 };
 
 const els = {
+  sidePanel: document.querySelector(".side-panel"),
+  navToggle: document.querySelector("#navToggle"),
   docList: document.querySelector("#docList"),
   currentKind: document.querySelector("#currentKind"),
   currentTitle: document.querySelector("#currentTitle"),
@@ -86,6 +88,12 @@ const els = {
     assets: document.querySelector("#assetsView"),
   },
 };
+
+function setNavigationOpen(isOpen) {
+  els.sidePanel.classList.toggle("nav-open", isOpen);
+  els.navToggle.setAttribute("aria-expanded", String(isOpen));
+  els.navToggle.setAttribute("aria-label", isOpen ? "收起文档导航" : "展开文档导航");
+}
 
 function escapeHtml(value) {
   return value
@@ -284,6 +292,7 @@ function renderDocList() {
   els.docList.querySelectorAll(".doc-button").forEach((button) => {
     button.addEventListener("click", () => {
       const doc = docs.find((item) => item.id === button.dataset.doc);
+      setNavigationOpen(false);
       setActiveDoc(doc);
     });
   });
@@ -376,8 +385,23 @@ function setupSearch() {
   });
 }
 
+function setupNavigation() {
+  els.navToggle.addEventListener("click", () => {
+    setNavigationOpen(!els.sidePanel.classList.contains("nav-open"));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setNavigationOpen(false);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 1200) setNavigationOpen(false);
+  });
+}
+
 renderDocList();
 renderChapters();
 setupTabs();
 setupSearch();
+setupNavigation();
 setActiveDoc(state.activeDoc);
